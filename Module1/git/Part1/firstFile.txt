@@ -6,5 +6,5 @@ line 5 (updated, step 18)
 line 6 (updated, step 18)
 line 7
 line 8
-line 9
+line 9 (updated, step 20)
 line 10
