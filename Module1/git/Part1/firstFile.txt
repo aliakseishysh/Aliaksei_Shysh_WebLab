@@ -1,7 +1,7 @@
-line 1
-line 2
-line 3
-line 4
+line 1 (updated, step 7)
+line 2 (updated, step 7)
+line 3 (updated, step 8)
+line 4 (updated, step 8)
 line 5
 line 6
 line 7
