@@ -1,4 +1,4 @@
-package by.aliakseishysh.customjar;
+package by.aliakseishysh.utils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class StringUtils {

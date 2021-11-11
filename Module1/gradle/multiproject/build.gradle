@@ -10,10 +10,54 @@ repositories {
 }
 
 dependencies {
+    testImplementation(platform('org.junit:junit-bom:5.8.1'))
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+}
+
+subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
+jar.dependsOn subprojects.tasks['classes']
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes(
+                'Main-Class': 'by.aliakseishysh.multiproject.api.App',
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version
+        )
+    }
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect { zipTree(it) }
+    }
 }
 
 test {
     useJUnitPlatform()
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        testImplementation(platform('org.junit:junit-bom:5.8.1'))
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+    }
+    jar {
+        from {
+            configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+        manifest {
+            attributes(
+                    'Implementation-Title': project.name,
+                    'Implementation-Version': project.version
+            )
+        }
+    }
+    test {
+        useJUnitPlatform()
+    }
 }

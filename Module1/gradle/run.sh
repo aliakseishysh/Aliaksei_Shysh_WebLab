@@ -21,13 +21,13 @@ function copy_dependencies_from_utils_to_multiproject_core() {
 ############################################################################################
 function build_multiproject() {
   echo "Starting multiproject build"
-  (cd multiproject/ && gradle build)
+  (cd multiproject/ && gradle build --info --warning-mode all)
 }
 
-build_utils_project
-copy_dependencies_from_utils_to_multiproject_core
-build_utils_project
+#build_utils_project
+#copy_dependencies_from_utils_to_multiproject_core
+#build_multiproject
 
 echo "Running jar with sample data"
-java -jar multiproject/api/build/libs/api-1.0.jar "12" "79"
+java -jar multiproject/build/libs/multiproject-1.0.jar "12" "79"
 

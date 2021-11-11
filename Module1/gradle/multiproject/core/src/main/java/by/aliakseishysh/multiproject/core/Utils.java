@@ -3,7 +3,7 @@ package by.aliakseishysh.multiproject.core;
 import java.util.Arrays;
 import java.util.List;
 
-import by.aliakseishysh.customjar.StringUtils;
+import by.aliakseishysh.utils.StringUtils;
 
 public class Utils {
     public static boolean isAllPositiveNumbers(String ... str) {
