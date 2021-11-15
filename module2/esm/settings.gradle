@@ -1,0 +1,5 @@
+rootProject.name = 'esm'
+include 'database'
+include 'service'
+include 'controller'
+
