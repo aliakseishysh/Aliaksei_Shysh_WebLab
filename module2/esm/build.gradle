@@ -24,6 +24,7 @@ task jacocoGenerateRootReport(type: JacocoReport, group: 'Test Reporting') {
     executionData.from = files([executionTree])
 
     reports {
+        xml.required = true
         xml.destination file("${rootProject.projectDir}/build/reports/jacoco/report.xml")
     }
 }
