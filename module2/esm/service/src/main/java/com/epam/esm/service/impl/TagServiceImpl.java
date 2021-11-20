@@ -24,12 +24,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public boolean createTag(String name) {
-        return tagDao.create(name);
+    public long createTag(Tag tag) {
+        return tagDao.create(tag);
     }
 
     @Override
-    public long createTag(Tag tag) {
-        return tagDao.create(tag);
+    public boolean deleteTag(long id) {
+        return tagDao.delete(id);
     }
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TagService {
     List<Tag> findTags();
-    boolean createTag(String name);
     long createTag(Tag tag);
+    boolean deleteTag(long id);
 }

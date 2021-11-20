@@ -1,8 +1,9 @@
 package com.epam.esm.service;
 
-import java.security.cert.Certificate;
+import com.epam.esm.database.entity.GiftCertificate;
+
 import java.util.List;
 
 public interface GiftCertificateService {
-    List<Certificate> findCertificates();
+    List<GiftCertificate> findCertificates();
 }

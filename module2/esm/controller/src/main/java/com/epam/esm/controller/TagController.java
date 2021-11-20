@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +22,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/tags", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TagController.class);
-
     private TagService tagService;
 
     @Autowired
     public TagController(TagService tagService) {
-        LOGGER.info("findTags: " + tagService);
         this.tagService = tagService;
     }
 
@@ -41,5 +40,11 @@ public class TagController {
     public ResponseEntity<Long> createTag(@RequestBody Tag tag) {
         Long result = tagService.createTag(tag);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Boolean> deleteTag(@PathVariable long id) {
+        return ResponseEntity.ok(tagService.deleteTag(id));
     }
 }

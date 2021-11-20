@@ -19,15 +19,11 @@ public class TagDaoImpl implements TagDao {
     private JdbcTemplate jdbcTemplate;
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
+    private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Override
-    public boolean create(String name) {
-        return jdbcTemplate.update(CREATE_TAG, name) == 1;
     }
 
     @Override
@@ -47,17 +43,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Optional<Tag> read(long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public List<Tag> readByCertificateId(long id) {
-        return null;
-    }
-
-    @Override
     public boolean delete(long id) {
-        return false;
+       return jdbcTemplate.update(DELETE_TAG, id) == 1;
     }
 }
