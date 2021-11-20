@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CertificateDao {
-    boolean create(GiftCertificate tag);
+    long create(GiftCertificate tag);
     List<GiftCertificate> read();
     Optional<GiftCertificate> read(long id);
     List<GiftCertificate> readByCertificateId(long id);

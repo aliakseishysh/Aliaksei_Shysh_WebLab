@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TagDao {
-    boolean create(Tag tag);
+    boolean create(String name);
+    long create(Tag tag);
     List<Tag> read();
     Optional<Tag> read(long id);
     List<Tag> readByCertificateId(long id);
