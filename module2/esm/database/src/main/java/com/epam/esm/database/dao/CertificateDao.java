@@ -3,13 +3,11 @@ package com.epam.esm.database.dao;
 import com.epam.esm.database.entity.GiftCertificate;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CertificateDao {
-    long create(GiftCertificate tag);
+    long create(GiftCertificate certificate);
     List<GiftCertificate> read();
-    Optional<GiftCertificate> read(long id);
-    List<GiftCertificate> readByCertificateId(long id);
-    boolean update(GiftCertificate giftCertificate);
+    List<GiftCertificate> read(long id);
+    boolean update(long id, GiftCertificate giftCertificate);
     boolean delete(long id);
 }

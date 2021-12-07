@@ -16,10 +16,10 @@ import java.util.Optional;
 @Component
 public class TagDaoImpl implements TagDao {
 
-    private JdbcTemplate jdbcTemplate;
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {

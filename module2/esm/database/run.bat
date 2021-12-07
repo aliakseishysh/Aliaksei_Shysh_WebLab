@@ -1,1 +1,1 @@
-psql -U aliaksei -d esm -f database_creation.sql
+psql -U aliaksei -f database_creation.sql

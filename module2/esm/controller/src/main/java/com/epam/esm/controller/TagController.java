@@ -29,17 +29,17 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Tag>> findTags() {
-        List<Tag> tags = tagService.findTags();
-        return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Long> createTag(@RequestBody Tag tag) {
         Long result = tagService.createTag(tag);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Tag>> findTags() {
+        List<Tag> tags = tagService.findTags();
+        return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
