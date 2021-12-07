@@ -24,6 +24,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Tag> read(Tag tag) {
+        return tagDao.read(tag);
+    }
+
+    @Override
     public long createTag(Tag tag) {
         return tagDao.create(tag);
     }

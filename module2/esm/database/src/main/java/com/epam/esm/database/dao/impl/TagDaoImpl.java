@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class TagDaoImpl implements TagDao {
 
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
+    private static final String READ_TAG = "SELECT id, name FROM tags WHERE id = ? OR name = ?";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
     private JdbcTemplate jdbcTemplate;
 
@@ -40,6 +40,11 @@ public class TagDaoImpl implements TagDao {
     @Override
     public List<Tag> read() {
         return jdbcTemplate.query(READ_TAGS, new BeanPropertyRowMapper<>(Tag.class));
+    }
+
+    @Override
+    public List<Tag> read(Tag tag) {
+        return jdbcTemplate.query(READ_TAG, new BeanPropertyRowMapper<>(Tag.class), tag.getId(), tag.getName());
     }
 
     @Override
