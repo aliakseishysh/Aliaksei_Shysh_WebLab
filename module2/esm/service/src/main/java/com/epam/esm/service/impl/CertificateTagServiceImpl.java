@@ -50,6 +50,8 @@ public class CertificateTagServiceImpl implements CertificateTagService {
             if (tagList.size() == 0) {
                 long createdTagId = tagService.createTag(tag);
                 tagCertificateDao.create(createdTagId, certificateId);
+            } else {
+                tagCertificateDao.create(tagList.get(0).getId(), certificateId);
             }
         });
     }

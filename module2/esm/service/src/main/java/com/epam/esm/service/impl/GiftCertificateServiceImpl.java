@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.CertificateDao;
+import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> read(String tagName) {
+    public List<CertificateTag> read(String tagName) {
         return certificateDao.read(tagName);
     }
 

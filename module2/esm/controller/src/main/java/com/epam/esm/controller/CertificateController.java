@@ -44,8 +44,8 @@ public class CertificateController {
     }
 
     @GetMapping(path = "/tags/{tagName}")
-    public ResponseEntity<List<GiftCertificate>> findCertificatesByTag(@PathVariable String tagName) {
-        List<GiftCertificate> certificates = certificateService.read(tagName);
+    public ResponseEntity<List<CertificateTag>> findCertificatesByTag(@PathVariable String tagName) {
+        List<CertificateTag> certificates = certificateService.read(tagName);
         return ResponseEntity.ok(certificates);
     }
 
