@@ -22,8 +22,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return certificateDao.create(certificate);
     }
     @Override
-    public List<GiftCertificate> findCertificates() {
+    public List<GiftCertificate> read() {
         return certificateDao.read();
+    }
+
+    @Override
+    public List<GiftCertificate> read(String tagName) {
+        return certificateDao.read(tagName);
     }
 
     @Override

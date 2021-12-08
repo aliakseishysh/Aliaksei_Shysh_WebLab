@@ -8,6 +8,7 @@ public interface CertificateDao {
     long create(GiftCertificate certificate);
     List<GiftCertificate> read();
     List<GiftCertificate> read(long id);
+    List<GiftCertificate> read(String tagName);
     boolean update(long id, GiftCertificate giftCertificate);
     boolean delete(long id);
 }

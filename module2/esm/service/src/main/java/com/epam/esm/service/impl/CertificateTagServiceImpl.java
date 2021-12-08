@@ -29,35 +29,28 @@ public class CertificateTagServiceImpl implements CertificateTagService {
 
     @Override
     public long create(CertificateTag certificateTag) {
-        // TODO create certificate, then create tags
         GiftCertificate certificate = certificateTag.getCertificate();
         long createdCertificateId = giftCertificateService.create(certificate);
-        List<Tag> tags = certificateTag.getTags();
-        tags.stream().forEach((tag) -> {
-            List<Tag> tagList = tagService.read(tag);
-            if (tagList.size() == 0) {
-                long createdTagId = tagService.createTag(tag);
-                tagCertificateDao.create(createdTagId, createdCertificateId);
-            }
-        });
-        // TODO what should I return?
-        return 0;
+        createTagsForCertificate(createdCertificateId, certificateTag.getTags());
+        return createdCertificateId;
     }
 
     @Override
     public boolean update(long id, CertificateTag certificateTag) {
-        // TODO update certificate, then create tags
         GiftCertificate certificate = certificateTag.getCertificate();
         boolean certificateUpdateResult = giftCertificateService.update(id, certificate);
-        List<Tag> tags = certificateTag.getTags();
+        createTagsForCertificate(id, certificateTag.getTags());
+        return certificateUpdateResult;
+    }
+
+    // TODO change return type to boolean?
+    private void createTagsForCertificate(long certificateId, List<Tag> tags) {
         tags.stream().forEach((tag) -> {
             List<Tag> tagList = tagService.read(tag);
             if (tagList.size() == 0) {
                 long createdTagId = tagService.createTag(tag);
-                tagCertificateDao.create(createdTagId, id);
+                tagCertificateDao.create(createdTagId, certificateId);
             }
         });
-        // TODO what should I return?
-        return false;
     }
 }

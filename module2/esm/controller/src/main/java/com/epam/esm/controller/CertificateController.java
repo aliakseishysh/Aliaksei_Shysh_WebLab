@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +39,14 @@ public class CertificateController {
 
     @GetMapping
     public ResponseEntity<List<GiftCertificate>> findCertificates() {
-        List<GiftCertificate> certificates = certificateService.findCertificates();
+        List<GiftCertificate> certificates = certificateService.read();
         return !certificates.isEmpty() ? ResponseEntity.ok(certificates) : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/tags/{tagName}")
+    public ResponseEntity<List<GiftCertificate>> findCertificatesByTag(@PathVariable String tagName) {
+        List<GiftCertificate> certificates = certificateService.read(tagName);
+        return ResponseEntity.ok(certificates);
     }
 
     @PostMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

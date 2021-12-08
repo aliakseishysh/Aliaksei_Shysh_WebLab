@@ -19,6 +19,9 @@ public class CertificateDaoImpl implements CertificateDao {
     private static final String CREATE_CERTIFICATE = "INSERT INTO gift_certificates(name, description, price, duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String READ_CERTIFICATE = "SELECT id, name, description, price, duration, create_date, last_update_date FROM gift_certificates";
     private static final String READ_CERTIFICATE_BY_ID = "SELECT id, name, description, price, duration, create_date, last_update_date FROM gift_certificates WHERE id = ?";
+    private static final String READ_CERTIFICATE_BY_TAG_NAME = "SELECT gift_certificates.id, gift_certificates.name, description, price, duration, create_date, last_update_date "
+            + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON "
+            + "tags.id = tags_gift_certificates.tag_id WHERE tags.name = ?";
     private static final String DELETE_CERTIFICATE = "DELETE FROM gift_certificates WHERE id = ?";
     private static final String UPDATE_CERTIFICATE = "UPDATE gift_certificates SET id = COALESCE(?, id), name = COALESCE(?, name), description = COALESCE(?, description), "
             + "price = COALESCE(?, price), duration = COALESCE(?, duration), create_date = COALESCE(?, create_date), "
@@ -57,6 +60,11 @@ public class CertificateDaoImpl implements CertificateDao {
     }
 
     @Override
+    public List<GiftCertificate> read(String tagName) {
+        return jdbcTemplate.query(READ_CERTIFICATE_BY_TAG_NAME, new BeanPropertyRowMapper<>(GiftCertificate.class), tagName);
+    }
+
+    @Override
     public boolean update(long id, GiftCertificate giftCertificate) {
         return jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(UPDATE_CERTIFICATE);
@@ -64,7 +72,7 @@ public class CertificateDaoImpl implements CertificateDao {
             statement.setObject(2, giftCertificate.getName());
             statement.setObject(3, giftCertificate.getDescription());
             statement.setObject(4, giftCertificate.getPrice());
-            statement.setObject(5,  giftCertificate.getDuration());
+            statement.setObject(5, giftCertificate.getDuration());
             Timestamp createDate = giftCertificate.getCreateDate() != null ? Timestamp.valueOf(giftCertificate.getCreateDate()) : null;
             statement.setObject(6, createDate);
             Timestamp lastUpdateDate = giftCertificate.getLastUpdateDate() != null ? Timestamp.valueOf(giftCertificate.getLastUpdateDate()) : null;
