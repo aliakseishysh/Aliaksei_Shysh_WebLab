@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.database.entity.SortOrder;
+import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +34,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<CertificateTag> readSortedOrdered(List<SortOrder> sortOrder) {
-        return certificateDao.readSortedOrdered(sortOrder);
-    }
-
-    @Override
-    public List<CertificateTag> readByPartialName(String partialName) {
-        return certificateDao.readByPartialName(partialName);
-    }
-
-    @Override
-    public List<CertificateTag> readByPartialDescription(String partialDescription) {
-        return certificateDao.readByPartialDescription(partialDescription);
+    public List<CertificateTag> read(SearchData searchData) {
+        return certificateDao.read(searchData);
     }
 
     @Override

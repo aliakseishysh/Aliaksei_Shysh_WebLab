@@ -4,19 +4,20 @@ import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.database.dao.extractor.CertificateTagExtractor;
 import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.database.entity.SortOrder;
+import com.epam.esm.database.entity.SearchData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class CertificateDaoImpl implements CertificateDao {
 
     private static final String SPACE_SEPARATOR = " ";
@@ -27,9 +28,6 @@ public class CertificateDaoImpl implements CertificateDao {
             + "tags.id, tags.name "
             + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON "
             + "tags.id = tags_gift_certificates.tag_id";
-    private static final String WHERE_CERTIFICATE_NAME_LIKE = "WHERE gift_certificates.name LIKE ?";
-    private static final String WHERE_CERTIFICATE_DESCRIPTION_LIKE = "WHERE gift_certificates.description LIKE ?";
-
 
 
     // TODO load sql script from separate file!!!!!!!!!!!!!!!!!
@@ -41,23 +39,32 @@ public class CertificateDaoImpl implements CertificateDao {
             + "cte_all_certificates.all_desc AS description, cte_all_certificates.all_price AS price, cte_all_certificates.all_dur AS duration, cte_all_certificates.all_cd AS create_date, cte_all_certificates.all_ud AS last_update_date, "
             + "cte_all_certificates.all_t_ud AS id, cte_all_certificates.all_t_name AS name FROM cte_all_certificates INNER JOIN cte_certificates_only_with_tag ON cte_all_certificates.all_id = cte_certificates_only_with_tag.only_id";
 
+    private static final String READ_CERTIFICATES_WITH_TAGS_CTE = "WITH cte_ac AS (SELECT gift_certificates.id AS c_id, gift_certificates.name AS c_name, "
+            + "description, price, duration, create_date, last_update_date, tags.id AS t_id, tags.name AS t_name "
+            + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id "
+            + "), cte_ot AS (SELECT gift_certificates.id AS o_id FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id "
+            + "INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id %s) SELECT cte_ac.c_id AS id, cte_ac.c_name AS name, "
+            + "cte_ac.description, cte_ac.price, cte_ac.duration, cte_ac.create_date, cte_ac.last_update_date, "
+            + "cte_ac.t_id AS id, cte_ac.t_name AS name FROM cte_ac INNER JOIN cte_ot ON cte_ac.c_id = cte_ot.o_id";
+
+    private static final String WHERE_CERTIFICATE_NAME_LIKE = "WHERE cte_ac.c_name LIKE ?";
+    private static final String WHERE_CERTIFICATE_DESCRIPTION_LIKE = "WHERE cte_ac.description LIKE ?";
+    private static final String WHERE_CERTIFICATE_NAME_OR_DESCRIPTION_LIKE = "WHERE cte_ac.c_name LIKE ? OR cte_ac.description LIKE ?";
+
+    private static final String WHERE_TAGS_NAME = "WHERE tags.name = ?";
+
+
 
     private static final String DELETE_CERTIFICATE = "DELETE FROM gift_certificates WHERE id = ?";
     private static final String UPDATE_CERTIFICATE = "UPDATE gift_certificates SET id = COALESCE(?, id), name = COALESCE(?, name), description = COALESCE(?, description), "
             + "price = COALESCE(?, price), duration = COALESCE(?, duration), create_date = COALESCE(?, create_date), "
             + "last_update_date = COALESCE(?, last_update_date) WHERE id = ?";
-    private static final String ORDER_BY_NAME_ASC = "ORDER BY gift_certificates.name ASC";
-    private static final String ORDER_BY_CREATED_DATE_DESC = "ORDER BY gift_certificates.created_date ASC";
-
-
-
 
     // TODO Sort by date/name asc/desc
-    private static final String SQL_ASC = "ASC";
-    private static final String SQL_DESC = "DESC";
     private static final String PERCENT = "%";
     private static final String ORDER_BY = "ORDER BY";
     private static final String COMMA = ",";
+    private static final String QUESTION = "?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -92,36 +99,43 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(READ_CERTIFICATE_BY_ID, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
     }
 
+    //TODO split to different methods, smth like "editSqlQuery"
+    @Override
+    public List<CertificateTag> read(SearchData searchData) {
+        List<String> queryParameters = new ArrayList<>();
+        String resultQuery = READ_CERTIFICATES_WITH_TAGS_CTE;
+        if (searchData.getTagName() != null) {
+            queryParameters.add(searchData.getTagName());
+            resultQuery = String.format(resultQuery, WHERE_TAGS_NAME);
+        }
+        if (searchData.getPartialCertificateName() != null && searchData.getPartialCertificateDescription() == null) {
+            queryParameters.add(PERCENT + searchData.getPartialCertificateName() + PERCENT);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_NAME_LIKE);
+        } else if (searchData.getPartialCertificateName() == null && searchData.getPartialCertificateDescription() != null) {
+            queryParameters.add(PERCENT + searchData.getPartialCertificateDescription() + PERCENT);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_DESCRIPTION_LIKE);
+        } else if (searchData.getPartialCertificateName() != null && searchData.getPartialCertificateDescription() != null) {
+            queryParameters.add(PERCENT + searchData.getPartialCertificateName() + PERCENT);
+            queryParameters.add(PERCENT + searchData.getPartialCertificateDescription() + PERCENT);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_NAME_OR_DESCRIPTION_LIKE);
+        }
+        if (searchData.getSortData() != null && searchData.getSortData().size() >= 1) {
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, ORDER_BY);
+            for (int i = 0; i < searchData.getSortData().size(); i++) {
+                resultQuery = String.join(SPACE_SEPARATOR, resultQuery, QUESTION, searchData.getSortData().get(i).getOrderBy().name());
+                queryParameters.add(searchData.getSortData().get(i).getSortBy());
+                if (searchData.getSortData().size() - i > 1) {
+                    resultQuery += COMMA;
+                }
+            }
+        }
+        return jdbcTemplate.query(resultQuery, new CertificateTagExtractor(), queryParameters.toArray());
+    }
+
+
     @Override
     public List<CertificateTag> read(String tagName) {
         return jdbcTemplate.query(READ_CERTIFICATES_WITH_TAGS_BY_TAG, new CertificateTagExtractor(), tagName);
-    }
-
-    @Override
-    public List<CertificateTag> readSortedOrdered(List<SortOrder> sortOrder) {
-        String resultQuery = READ_CERTIFICATES_WITH_TAGS + SPACE_SEPARATOR + ORDER_BY;
-        for (int i = 0; i < sortOrder.size(); i++) {
-            resultQuery += SPACE_SEPARATOR;
-            resultQuery += sortOrder.get(i).getSortBy();
-            resultQuery += SPACE_SEPARATOR;
-            resultQuery += sortOrder.get(i).getOrderBy();
-            if (sortOrder.size() - i > 1) {
-                resultQuery += COMMA;
-            }
-        }
-        return jdbcTemplate.query(resultQuery, new CertificateTagExtractor());
-    }
-
-    @Override
-    public List<CertificateTag> readByPartialName(String partialName) {
-        return jdbcTemplate.query(String.join(SPACE_SEPARATOR, READ_CERTIFICATES_WITH_TAGS, WHERE_CERTIFICATE_NAME_LIKE),
-                new CertificateTagExtractor(), PERCENT + partialName + PERCENT);
-    }
-
-    @Override
-    public List<CertificateTag> readByPartialDescription(String partialDescription) {
-        return jdbcTemplate.query(String.join(SPACE_SEPARATOR, READ_CERTIFICATES_WITH_TAGS, WHERE_CERTIFICATE_DESCRIPTION_LIKE),
-                new CertificateTagExtractor(), PERCENT + partialDescription + PERCENT);
     }
 
     @Override

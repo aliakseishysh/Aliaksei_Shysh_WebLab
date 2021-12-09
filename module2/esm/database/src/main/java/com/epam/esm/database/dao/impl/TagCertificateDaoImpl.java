@@ -3,9 +3,9 @@ package com.epam.esm.database.dao.impl;
 import com.epam.esm.database.dao.TagCertificateDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class TagCertificateDaoImpl implements TagCertificateDao {
     private static final String CREATE_TAG_CERTIFICATE = "INSERT INTO tags_gift_certificates(tag_id, certificate_id) VALUES (?, ?)";
     private JdbcTemplate jdbcTemplate;

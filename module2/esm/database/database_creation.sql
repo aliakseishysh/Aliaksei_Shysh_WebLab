@@ -3,7 +3,7 @@ SELECT 'CREATE DATABASE esm' WHERE NOT EXISTS (SELECT FROM pg_database WHERE dat
 
 CREATE TABLE IF NOT EXISTS tags (
     "id" bigserial PRIMARY KEY,
-    "name" VARCHAR(255)
+    "name" VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS gift_certificates (
@@ -18,5 +18,6 @@ CREATE TABLE IF NOT EXISTS gift_certificates (
 
 CREATE TABLE IF NOT EXISTS tags_gift_certificates (
     "tag_id" BIGINT NOT NULL REFERENCES tags ("id"),
-    "certificate_id" BIGINT NOT NULL REFERENCES gift_certificates ("id")
+    "certificate_id" BIGINT NOT NULL REFERENCES gift_certificates ("id"),
+    PRIMARY KEY ("tag_id", "certificate_id")
 );

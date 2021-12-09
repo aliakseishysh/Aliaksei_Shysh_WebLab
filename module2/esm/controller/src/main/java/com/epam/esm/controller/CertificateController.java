@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.database.entity.SortOrder;
+import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,29 +44,35 @@ public class CertificateController {
         return !certificates.isEmpty() ? ResponseEntity.ok(certificates) : ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/tags/{tagName}")
-    public ResponseEntity<List<CertificateTag>> findCertificatesByTag(@PathVariable String tagName) {
-        List<CertificateTag> certificates = certificateService.read(tagName);
+    @PostMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CertificateTag>> findCertificatesWithSearchData(@RequestBody SearchData searchData) {
+        List<CertificateTag> certificates = certificateService.read(searchData);
         return ResponseEntity.ok(certificates);
     }
 
-    @GetMapping(path = "/pname/{partialName}")
-    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsByPartialName(@PathVariable String partialName) {
-        List<CertificateTag> certificates = certificateService.readByPartialName(partialName);
-        return ResponseEntity.ok(certificates);
-    }
+//    @GetMapping(path = "/tags/{tagName}")
+//    public ResponseEntity<List<CertificateTag>> findCertificatesByTag(@PathVariable String tagName) {
+//        List<CertificateTag> certificates = certificateService.read(tagName);
+//        return ResponseEntity.ok(certificates);
+//    }
 
-    @GetMapping(path = "/pdescription/{partialDescription}")
-    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsByPartialDescription(@PathVariable String partialDescription) {
-        List<CertificateTag> certificates = certificateService.readByPartialDescription(partialDescription);
-        return ResponseEntity.ok(certificates);
-    }
-
-    @GetMapping(path = "/sort_order", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsSortedAndOrdered(@RequestBody List<SortOrder> sortOrder) {
-        List<CertificateTag> certificates = certificateService.readSortedOrdered(sortOrder);
-        return ResponseEntity.ok(certificates);
-    }
+//    @GetMapping(path = "/pname/{partialName}")
+//    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsByPartialName(@PathVariable String partialName) {
+//        List<CertificateTag> certificates = certificateService.readByPartialName(partialName);
+//        return ResponseEntity.ok(certificates);
+//    }
+//
+//    @GetMapping(path = "/pdescription/{partialDescription}")
+//    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsByPartialDescription(@PathVariable String partialDescription) {
+//        List<CertificateTag> certificates = certificateService.readByPartialDescription(partialDescription);
+//        return ResponseEntity.ok(certificates);
+//    }
+//
+//    @GetMapping(path = "/sort_order", consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<CertificateTag>> findCertificatesWithTagsSortedAndOrdered(@RequestBody List<SearchData> searchData) {
+//        List<CertificateTag> certificates = certificateService.readSortedOrdered(searchData);
+//        return ResponseEntity.ok(certificates);
+//    }
 
 
     @PostMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
