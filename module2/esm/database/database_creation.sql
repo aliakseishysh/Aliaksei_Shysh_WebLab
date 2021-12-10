@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS gift_certificates (
 );
 
 CREATE TABLE IF NOT EXISTS tags_gift_certificates (
-    "tag_id" BIGINT NOT NULL REFERENCES tags ("id"),
-    "certificate_id" BIGINT NOT NULL REFERENCES gift_certificates ("id"),
+    "tag_id" BIGINT NOT NULL REFERENCES tags ("id") ON DELETE CASCADE,
+    "certificate_id" BIGINT NOT NULL REFERENCES gift_certificates ("id") ON DELETE CASCADE,
     PRIMARY KEY ("tag_id", "certificate_id")
 );

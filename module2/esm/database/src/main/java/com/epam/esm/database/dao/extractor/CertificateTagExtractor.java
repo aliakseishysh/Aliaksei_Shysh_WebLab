@@ -4,7 +4,6 @@ import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.Tag;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;

@@ -2,7 +2,9 @@ package com.epam.esm.database.dao.impl;
 
 import com.epam.esm.database.dao.TagDao;
 import com.epam.esm.database.entity.Tag;
+import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,14 +29,18 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public long create(Tag tag) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[] {"id"});
-            statement.setString(1, tag.getName());
-            return statement;
-        }, keyHolder);
-        return keyHolder.getKey().longValue();
+    public long create(Tag tag) throws EntityAlreadyExistsDaoException {
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[] {"id"});
+                statement.setString(1, tag.getName());
+                return statement;
+            }, keyHolder);
+            return keyHolder.getKey().longValue();
+        } catch (DuplicateKeyException e) {
+            throw new EntityAlreadyExistsDaoException("Entity Tag with name=" + tag.getName() + " already exists.");
+        }
     }
 
     @Override

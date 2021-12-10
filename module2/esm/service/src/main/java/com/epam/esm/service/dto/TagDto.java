@@ -1,14 +1,13 @@
-package com.epam.esm.database.entity;
+package com.epam.esm.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tag {
+public class TagDto {
     private Long id;
     private String name;
 }

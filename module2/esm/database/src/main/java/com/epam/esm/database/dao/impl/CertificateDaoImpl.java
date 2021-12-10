@@ -29,27 +29,17 @@ public class CertificateDaoImpl implements CertificateDao {
             + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON "
             + "tags.id = tags_gift_certificates.tag_id";
 
-
-    // TODO load sql script from separate file!!!!!!!!!!!!!!!!!
-    private static final String READ_CERTIFICATES_WITH_TAGS_BY_TAG = "WITH cte_all_certificates AS (SELECT gift_certificates.id AS all_id, gift_certificates.name AS all_name, "
-            + "description AS all_desc, price AS all_price, duration AS all_dur, create_date AS all_cd, last_update_date AS all_ud, tags.id AS all_t_ud, tags.name AS all_t_name "
-            + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id "
-            + "), cte_certificates_only_with_tag AS (SELECT gift_certificates.id AS only_id FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id "
-            + "INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id WHERE tags.name = ?) SELECT cte_all_certificates.all_id AS id, cte_all_certificates.all_name AS name, "
-            + "cte_all_certificates.all_desc AS description, cte_all_certificates.all_price AS price, cte_all_certificates.all_dur AS duration, cte_all_certificates.all_cd AS create_date, cte_all_certificates.all_ud AS last_update_date, "
-            + "cte_all_certificates.all_t_ud AS id, cte_all_certificates.all_t_name AS name FROM cte_all_certificates INNER JOIN cte_certificates_only_with_tag ON cte_all_certificates.all_id = cte_certificates_only_with_tag.only_id";
-
     private static final String READ_CERTIFICATES_WITH_TAGS_CTE = "WITH cte_ac AS (SELECT gift_certificates.id AS c_id, gift_certificates.name AS c_name, "
             + "description, price, duration, create_date, last_update_date, tags.id AS t_id, tags.name AS t_name "
             + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id "
             + "), cte_ot AS (SELECT gift_certificates.id AS o_id FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id "
             + "INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id %s) SELECT cte_ac.c_id AS id, cte_ac.c_name AS name, "
             + "cte_ac.description, cte_ac.price, cte_ac.duration, cte_ac.create_date, cte_ac.last_update_date, "
-            + "cte_ac.t_id AS id, cte_ac.t_name AS name FROM cte_ac INNER JOIN cte_ot ON cte_ac.c_id = cte_ot.o_id";
+            + "cte_ac.t_id AS id, cte_ac.t_name AS name FROM cte_ac WHERE EXISTS(SELECT cte_ot.o_id FROM cte_ot WHERE cte_ac.c_id = cte_ot.o_id)";
 
-    private static final String WHERE_CERTIFICATE_NAME_LIKE = "WHERE cte_ac.c_name LIKE ?";
-    private static final String WHERE_CERTIFICATE_DESCRIPTION_LIKE = "WHERE cte_ac.description LIKE ?";
-    private static final String WHERE_CERTIFICATE_NAME_OR_DESCRIPTION_LIKE = "WHERE cte_ac.c_name LIKE ? OR cte_ac.description LIKE ?";
+    private static final String AND_CERTIFICATE_NAME_LIKE = "AND cte_ac.c_name LIKE ?";
+    private static final String AND_CERTIFICATE_DESCRIPTION_LIKE = "AND cte_ac.description LIKE ?";
+    private static final String AND_CERTIFICATE_NAME_AND_DESCRIPTION_LIKE = "AND cte_ac.c_name LIKE ? AND cte_ac.description LIKE ?";
 
     private static final String WHERE_TAGS_NAME = "WHERE tags.name = ?";
 
@@ -62,6 +52,7 @@ public class CertificateDaoImpl implements CertificateDao {
 
     // TODO Sort by date/name asc/desc
     private static final String PERCENT = "%";
+    private static final String EMPTY_LINE = "";
     private static final String ORDER_BY = "ORDER BY";
     private static final String COMMA = ",";
     private static final String QUESTION = "?";
@@ -94,11 +85,6 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(READ_CERTIFICATE, new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
-    @Override
-    public List<GiftCertificate> read(long id) {
-        return jdbcTemplate.query(READ_CERTIFICATE_BY_ID, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
-    }
-
     //TODO split to different methods, smth like "editSqlQuery"
     @Override
     public List<CertificateTag> read(SearchData searchData) {
@@ -107,22 +93,24 @@ public class CertificateDaoImpl implements CertificateDao {
         if (searchData.getTagName() != null) {
             queryParameters.add(searchData.getTagName());
             resultQuery = String.format(resultQuery, WHERE_TAGS_NAME);
+        } else {
+            resultQuery = String.format(resultQuery, EMPTY_LINE);
         }
         if (searchData.getPartialCertificateName() != null && searchData.getPartialCertificateDescription() == null) {
             queryParameters.add(PERCENT + searchData.getPartialCertificateName() + PERCENT);
-            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_NAME_LIKE);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, AND_CERTIFICATE_NAME_LIKE);
         } else if (searchData.getPartialCertificateName() == null && searchData.getPartialCertificateDescription() != null) {
             queryParameters.add(PERCENT + searchData.getPartialCertificateDescription() + PERCENT);
-            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_DESCRIPTION_LIKE);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, AND_CERTIFICATE_DESCRIPTION_LIKE);
         } else if (searchData.getPartialCertificateName() != null && searchData.getPartialCertificateDescription() != null) {
             queryParameters.add(PERCENT + searchData.getPartialCertificateName() + PERCENT);
             queryParameters.add(PERCENT + searchData.getPartialCertificateDescription() + PERCENT);
-            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, WHERE_CERTIFICATE_NAME_OR_DESCRIPTION_LIKE);
+            resultQuery = String.join(SPACE_SEPARATOR, resultQuery, AND_CERTIFICATE_NAME_AND_DESCRIPTION_LIKE);
         }
         if (searchData.getSortData() != null && searchData.getSortData().size() >= 1) {
             resultQuery = String.join(SPACE_SEPARATOR, resultQuery, ORDER_BY);
             for (int i = 0; i < searchData.getSortData().size(); i++) {
-                resultQuery = String.join(SPACE_SEPARATOR, resultQuery, QUESTION, searchData.getSortData().get(i).getOrderBy().name());
+                resultQuery = String.join(SPACE_SEPARATOR, resultQuery, QUESTION, searchData.getSortData().get(i).getOrderBy());
                 queryParameters.add(searchData.getSortData().get(i).getSortBy());
                 if (searchData.getSortData().size() - i > 1) {
                     resultQuery += COMMA;
@@ -130,12 +118,6 @@ public class CertificateDaoImpl implements CertificateDao {
             }
         }
         return jdbcTemplate.query(resultQuery, new CertificateTagExtractor(), queryParameters.toArray());
-    }
-
-
-    @Override
-    public List<CertificateTag> read(String tagName) {
-        return jdbcTemplate.query(READ_CERTIFICATES_WITH_TAGS_BY_TAG, new CertificateTagExtractor(), tagName);
     }
 
     @Override

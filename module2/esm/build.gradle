@@ -33,19 +33,6 @@ task jacocoGenerateRootReport(type: JacocoReport, group: 'Test Reporting') {
     }
 }
 
-//subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
-//war.dependsOn subprojects.tasks['classes']
-//war {
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    subprojects.each { subproject ->
-//        from subproject.configurations.archives.allArtifacts.files.collect { zipTree(it) }
-//    }
-//}
-
-//war {
-//    from 'controller/build/libs', 'database/build/libs', 'service/build/libs'
-//}
-
 dependencies {
     implementation project(":controller")
     implementation project(":database")
@@ -83,11 +70,8 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok:1.18.22'
         implementation 'org.slf4j:slf4j-api:1.7.32'
         implementation 'org.slf4j:slf4j-simple:1.7.32'
+        testImplementation 'org.mockito:mockito-core:4.1.0'
+        testImplementation 'org.mockito:mockito-junit-jupiter:4.1.0'
     }
-//    jar {
-//        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-//        from {
-//            configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-//        }
-//    }
+
 }

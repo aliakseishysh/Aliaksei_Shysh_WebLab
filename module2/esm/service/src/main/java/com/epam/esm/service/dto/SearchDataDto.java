@@ -1,4 +1,4 @@
-package com.epam.esm.database.entity;
+package com.epam.esm.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,16 +9,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchData {
+public class SearchDataDto {
     private String tagName;
     private String partialCertificateName;
     private String partialCertificateDescription;
-    private List<Sort> sortData;
+    private List<SortDto> sortData;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Sort {
+    public static class SortDto {
         private String sortBy;
         private String orderBy;
     }

@@ -1,8 +1,13 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.TagDao;
-import com.epam.esm.database.entity.Tag;
+import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
+import com.epam.esm.service.exception.EntityIsNotValidServiceException;
+import com.epam.esm.service.util.TagDtoMapper;
+import com.epam.esm.validation.TagDtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,22 +24,29 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findTags() {
-        return tagDao.read();
+    public List<TagDto> findTags() {
+        return TagDtoMapper.toDto(tagDao.read());
     }
 
     @Override
-    public List<Tag> read(Tag tag) {
-        return tagDao.read(tag);
+    public List<TagDto> read(TagDto tagDto) throws EntityIsNotValidServiceException {
+        TagDtoValidator.validate(tagDto.getName());
+        return TagDtoMapper.toDto(tagDao.read(TagDtoMapper.toObject(tagDto)));
     }
 
     @Override
-    public long createTag(Tag tag) {
-        return tagDao.create(tag);
+    public long createTag(TagDto tagDto) throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException {
+        try {
+            TagDtoValidator.validate(tagDto.getName());
+            return tagDao.create(TagDtoMapper.toObject(tagDto));
+        } catch (EntityAlreadyExistsDaoException e) {
+            throw new EntityAlreadyExistsServiceException(e);
+        }
     }
 
     @Override
-    public boolean deleteTag(long id) {
-        return tagDao.delete(id);
+    public boolean deleteTag(TagDto tagDto) throws EntityIsNotValidServiceException {
+        TagDtoValidator.validate(tagDto.getId());
+        return tagDao.delete(TagDtoMapper.toObject(tagDto).getId());
     }
 }
