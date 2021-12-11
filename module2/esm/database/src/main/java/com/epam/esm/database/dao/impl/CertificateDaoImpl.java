@@ -31,9 +31,9 @@ public class CertificateDaoImpl implements CertificateDao {
 
     private static final String READ_CERTIFICATES_WITH_TAGS_CTE = "WITH cte_ac AS (SELECT gift_certificates.id AS c_id, gift_certificates.name AS c_name, "
             + "description, price, duration, create_date, last_update_date, tags.id AS t_id, tags.name AS t_name "
-            + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id "
-            + "), cte_ot AS (SELECT gift_certificates.id AS o_id FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id "
-            + "INNER JOIN tags ON tags.id = tags_gift_certificates.tag_id %s) SELECT cte_ac.c_id AS id, cte_ac.c_name AS name, "
+            + "FROM gift_certificates LEFT JOIN tags_gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id LEFT JOIN tags ON tags.id = tags_gift_certificates.tag_id "
+            + "), cte_ot AS (SELECT gift_certificates.id AS o_id FROM gift_certificates LEFT JOIN tags_gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id "
+            + "LEFT JOIN tags ON tags.id = tags_gift_certificates.tag_id %s) SELECT cte_ac.c_id AS id, cte_ac.c_name AS name, "
             + "cte_ac.description, cte_ac.price, cte_ac.duration, cte_ac.create_date, cte_ac.last_update_date, "
             + "cte_ac.t_id AS id, cte_ac.t_name AS name FROM cte_ac WHERE EXISTS(SELECT cte_ot.o_id FROM cte_ot WHERE cte_ac.c_id = cte_ot.o_id)";
 

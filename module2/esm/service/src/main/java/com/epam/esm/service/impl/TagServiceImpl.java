@@ -24,7 +24,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDto> findTags() {
+    public List<TagDto> read() {
         return TagDtoMapper.toDto(tagDao.read());
     }
 

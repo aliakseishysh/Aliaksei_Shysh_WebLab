@@ -44,7 +44,7 @@ public class TagControllerTest {
         List<TagDto> expected = new ArrayList<>();
         expected.add(new TagDto(1L, "tag name 1"));
         expected.add(new TagDto(2L, "tag name 2"));
-        doReturn(expected).when(tagService).findTags();
+        doReturn(expected).when(tagService).read();
         ResponseEntity<List<TagDto>> responseEntity = tagController.findTags();
         assertEquals(expected, responseEntity.getBody());
     }

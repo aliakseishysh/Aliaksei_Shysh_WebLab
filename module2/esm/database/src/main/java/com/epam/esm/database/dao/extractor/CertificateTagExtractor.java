@@ -39,7 +39,9 @@ public class CertificateTagExtractor implements ResultSetExtractor<List<Certific
             Tag tag = new Tag();
             tag.setId(rs.getLong(8));
             tag.setName(rs.getString(9));
-            certificateTag.getTags().add(tag);
+            if (tag.getId() != 0 && tag.getName() != null) {
+                certificateTag.getTags().add(tag);
+            }
         }
         return results;
     }

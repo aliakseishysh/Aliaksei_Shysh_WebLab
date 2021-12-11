@@ -65,25 +65,25 @@ public class GiftCertificateDtoValidator {
     }
 
     public static void validatePartial(GiftCertificateDto certificateDto) throws EntityIsNotValidServiceException {
-        if (certificateDto.getId() != null && validateIdInternal(certificateDto.getId()) ) {
+        if (certificateDto.getId() != null && !validateIdInternal(certificateDto.getId()) ) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getName() != null && validateNameInternal(certificateDto.getName()) ) {
+        if (certificateDto.getName() != null && !validateNameInternal(certificateDto.getName()) ) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getDescription() != null && validateDescriptionInternal(certificateDto.getDescription())) {
+        if (certificateDto.getDescription() != null && !validateDescriptionInternal(certificateDto.getDescription())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getPrice() != null && validatePriceInternal(certificateDto.getPrice())) {
+        if (certificateDto.getPrice() != null && !validatePriceInternal(certificateDto.getPrice())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getDuration() != null && validateDurationInternal(certificateDto.getDuration())) {
+        if (certificateDto.getDuration() != null && !validateDurationInternal(certificateDto.getDuration())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getCreateDate() != null && validateDateInternal(certificateDto.getCreateDate())) {
+        if (certificateDto.getCreateDate() != null && !validateDateInternal(certificateDto.getCreateDate())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getLastUpdateDate() != null && validateDateInternal(certificateDto.getLastUpdateDate())) {
+        if (certificateDto.getLastUpdateDate() != null && !validateDateInternal(certificateDto.getLastUpdateDate())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
     }

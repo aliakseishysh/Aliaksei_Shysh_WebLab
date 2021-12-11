@@ -46,7 +46,7 @@ public class TagController {
 
     @GetMapping
     public ResponseEntity<List<TagDto>> findTags() {
-        List<TagDto> tags = tagService.findTags();
+        List<TagDto> tags = tagService.read();
         return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
     }
 

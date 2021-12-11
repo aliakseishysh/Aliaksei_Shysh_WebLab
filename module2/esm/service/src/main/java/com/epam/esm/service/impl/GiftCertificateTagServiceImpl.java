@@ -49,7 +49,7 @@ public class GiftCertificateTagServiceImpl implements GiftCertificateTagService 
     }
 
     // TODO change return type to boolean?
-    private void createTagsForCertificate(long certificateId, List<TagDto> tags) throws EntityIsNotValidServiceException {
+    public void createTagsForCertificate(long certificateId, List<TagDto> tags) throws EntityIsNotValidServiceException {
         if (tags != null) {
             for (TagDto tag : tags) {
                 List<TagDto> tagList = tagService.read(tag);
