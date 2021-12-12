@@ -13,17 +13,15 @@ public class TagDtoValidator {
         return id != null;
     }
 
-    public static String validate(String name) throws EntityIsNotValidServiceException {
+    public static void validate(String name) throws EntityIsNotValidServiceException {
         if (validateInternal(name)) {
-            return name;
         } else {
             throw new EntityIsNotValidServiceException("Entity TagDto name=" + name + " is not valid.");
         }
     }
 
-    public static Long validate(Long tagId) throws EntityIsNotValidServiceException {
+    public static void validate(Long tagId) throws EntityIsNotValidServiceException {
         if (validateInternal(tagId)) {
-            return tagId;
         } else {
             throw new EntityIsNotValidServiceException("Entity TagDto id=" + tagId + " is not valid.");
         }

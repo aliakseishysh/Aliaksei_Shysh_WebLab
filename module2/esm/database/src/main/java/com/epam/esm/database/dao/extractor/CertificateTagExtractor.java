@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class CertificateTagExtractor implements ResultSetExtractor<List<CertificateTag>> {
     private final Map<Long, CertificateTag> certificatesWithTags = new HashMap<>();
+
     @Override
     public List<CertificateTag> extractData(ResultSet rs) throws SQLException, DataAccessException {
         List<CertificateTag> results = new ArrayList<>();
@@ -23,26 +24,36 @@ public class CertificateTagExtractor implements ResultSetExtractor<List<Certific
             CertificateTag certificateTag = certificatesWithTags.get(rs.getLong(1));
             if (certificateTag == null) {
                 certificateTag = new CertificateTag();
-                GiftCertificate giftCertificate = new GiftCertificate();
-                giftCertificate.setId(rs.getLong(1));
-                giftCertificate.setName(rs.getString(2));
-                giftCertificate.setDescription(rs.getString(3));
-                giftCertificate.setPrice(rs.getBigDecimal(4));
-                giftCertificate.setDuration(rs.getInt(5));
-                giftCertificate.setCreateDate(rs.getObject(6, LocalDateTime.class));
-                giftCertificate.setLastUpdateDate(rs.getObject(7, LocalDateTime.class));
+                GiftCertificate giftCertificate = extractGiftCertificate(rs);
                 certificateTag.setCertificate(giftCertificate);
                 certificateTag.setTags(new ArrayList<>());
                 certificatesWithTags.put(rs.getLong(1), certificateTag);
                 results.add(certificateTag);
             }
-            Tag tag = new Tag();
-            tag.setId(rs.getLong(8));
-            tag.setName(rs.getString(9));
+            Tag tag = extractTag(rs);
             if (tag.getId() != 0 && tag.getName() != null) {
                 certificateTag.getTags().add(tag);
             }
         }
         return results;
+    }
+
+    private Tag extractTag(ResultSet rs) throws SQLException {
+        Tag tag = new Tag();
+        tag.setId(rs.getLong(8));
+        tag.setName(rs.getString(9));
+        return tag;
+    }
+
+    private GiftCertificate extractGiftCertificate(ResultSet rs) throws SQLException {
+        GiftCertificate giftCertificate = new GiftCertificate();
+        giftCertificate.setId(rs.getLong(1));
+        giftCertificate.setName(rs.getString(2));
+        giftCertificate.setDescription(rs.getString(3));
+        giftCertificate.setPrice(rs.getBigDecimal(4));
+        giftCertificate.setDuration(rs.getInt(5));
+        giftCertificate.setCreateDate(rs.getObject(6, LocalDateTime.class));
+        giftCertificate.setLastUpdateDate(rs.getObject(7, LocalDateTime.class));
+        return giftCertificate;
     }
 }

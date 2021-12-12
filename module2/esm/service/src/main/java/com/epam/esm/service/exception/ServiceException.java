@@ -1,7 +1,5 @@
 package com.epam.esm.service.exception;
 
-import java.security.PrivilegedActionException;
-
 public class ServiceException extends Exception {
 
     public ServiceException() {

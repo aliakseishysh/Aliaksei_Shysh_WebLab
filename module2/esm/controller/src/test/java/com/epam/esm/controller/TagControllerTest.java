@@ -53,9 +53,9 @@ public class TagControllerTest {
     public void deleteTagTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
         TagDto tagDto = new TagDto(1L, null);
         Boolean expected = true;
-        doReturn(expected).when(tagService).deleteTag(tagDto);
+        doReturn(true).when(tagService).deleteTag(tagDto);
         ResponseEntity<Boolean> actual = tagController.deleteTag(tagDto);
-        assertEquals(expected, actual.getBody());
+        assertEquals(true, actual.getBody());
     }
 
 

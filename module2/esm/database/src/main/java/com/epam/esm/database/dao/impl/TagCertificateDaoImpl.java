@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class TagCertificateDaoImpl implements TagCertificateDao {
     private static final String CREATE_TAG_CERTIFICATE = "INSERT INTO tags_gift_certificates(tag_id, certificate_id) VALUES (?, ?)";
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TagCertificateDaoImpl(JdbcTemplate jdbcTemplate) {

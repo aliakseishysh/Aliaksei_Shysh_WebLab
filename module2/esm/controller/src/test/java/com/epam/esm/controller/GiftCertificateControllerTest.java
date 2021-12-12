@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 public class GiftCertificateControllerTest {
@@ -57,24 +57,14 @@ public class GiftCertificateControllerTest {
         List<GiftCertificateDto> expected = new ArrayList<>();
         expected.add(
                 new GiftCertificateDto(
-                        1L,
-                        "certificate name 1",
-                        "certificate description 1",
-                        BigDecimal.valueOf(1),
-                        1,
-                        LocalDateTime.parse("2021-01-01T09:10:12.100"),
-                        LocalDateTime.parse("2021-01-01T09:10:12.200")
+                        1L, "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                        LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
                 )
         );
         expected.add(
                 new GiftCertificateDto(
-                        2L,
-                        "certificate name 2",
-                        "certificate description 2",
-                        BigDecimal.valueOf(2),
-                        2,
-                        LocalDateTime.parse("2021-01-01T09:10:12.200"),
-                        LocalDateTime.parse("2021-01-01T09:10:12.300")
+                        2L, "certificate name 2", "certificate description 2", BigDecimal.valueOf(2), 2,
+                        LocalDateTime.parse("2021-01-01T09:10:12.200"), LocalDateTime.parse("2021-01-01T09:10:12.300")
                 )
         );
         doReturn(expected).when(giftCertificateService).read();
@@ -87,21 +77,13 @@ public class GiftCertificateControllerTest {
         List<CertificateTagDto> expected = new ArrayList<>();
         CertificateTagDto certificateTagDto = new CertificateTagDto();
         certificateTagDto.setCertificate(new GiftCertificateDto(
-                1L,
-                "certificate name 1",
-                "certificate description 1",
-                BigDecimal.valueOf(1),
-                1,
-                LocalDateTime.parse("2021-01-01T09:10:12.100"),
-                LocalDateTime.parse("2021-01-01T09:10:12.200")
+                1L, "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         ));
         certificateTagDto.setTags(new ArrayList<>());
         certificateTagDto.getTags().add(new TagDto(1L, "tag name 1"));
         SearchDataDto searchDataDto = new SearchDataDto(
-            "tag name 1",
-            "1",
-            "1",
-            new ArrayList<>()
+                "tag name 1", "1", "1", new ArrayList<>()
         );
         searchDataDto.getSortData().add(new SearchDataDto.SortDto("cte_ac.c_name", "ASC"));
         doReturn(expected).when(giftCertificateService).read(searchDataDto);
@@ -112,38 +94,27 @@ public class GiftCertificateControllerTest {
     @Test
     public void updateCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto(
-                null,
-                "certificate name 1",
-                "certificate description 1",
-                BigDecimal.valueOf(1),
-                1,
-                LocalDateTime.parse("2021-01-01T09:10:12.100"),
-                LocalDateTime.parse("2021-01-01T09:10:12.200")
+                null, "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
         List<TagDto> tagsDto = new ArrayList<>();
         tagsDto.add(new TagDto(1L, "tag name 1"));
         CertificateTagDto certificateTagDto = new CertificateTagDto(giftCertificateDto, tagsDto);
         Boolean expected = true;
-        doReturn(expected).when(giftCertificateService).update(1L, certificateTagDto.getCertificate());
+        doReturn(true).when(giftCertificateService).update(1L, certificateTagDto.getCertificate());
         ResponseEntity<Boolean> responseEntity = giftCertificateController.updateCertificate(1L, certificateTagDto);
-        assertEquals(expected, responseEntity.getBody());
+        assertEquals(true, responseEntity.getBody());
     }
 
     @Test
     public void deleteCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
         GiftCertificateDto giCertificateTagDto = new GiftCertificateDto(
-                1L,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                1L, null, null, null, null, null, null
         );
         Boolean expected = true;
-        doReturn(expected).when(giftCertificateService).delete(giCertificateTagDto);
+        doReturn(true).when(giftCertificateService).delete(giCertificateTagDto);
         ResponseEntity<Boolean> responseEntity = giftCertificateController.deleteCertificate(giCertificateTagDto);
-        assertEquals(expected, responseEntity.getBody());
+        assertEquals(true, responseEntity.getBody());
     }
 
 

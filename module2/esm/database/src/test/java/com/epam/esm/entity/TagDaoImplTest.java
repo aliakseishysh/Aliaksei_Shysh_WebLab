@@ -1,11 +1,10 @@
 package com.epam.esm.entity;
 
-import com.epam.esm.database.dao.TagCertificateDao;
 import com.epam.esm.database.dao.TagDao;
-import com.epam.esm.database.dao.impl.TagCertificateDaoImpl;
 import com.epam.esm.database.dao.impl.TagDaoImpl;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -23,8 +22,8 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TagDaoImplTest {
 
-    private static EmbeddedDatabase embeddedDatabase;
     private static TagDao tagDao;
+    private static EmbeddedDatabase embeddedDatabase;
 
     @BeforeAll
     public static void init() {
@@ -78,6 +77,12 @@ public class TagDaoImplTest {
     @Order(4)
     public void deleteTest() {
         boolean actual = tagDao.delete(4L);
-        Assertions.assertEquals(true, actual);
+        Assertions.assertTrue(actual);
     }
+
+    @AfterAll
+    public static void shutdownDatabase() {
+        embeddedDatabase.shutdown();
+    }
+
 }

@@ -21,7 +21,7 @@ public class TagDaoImpl implements TagDao {
     private static final String READ_TAGS = "SELECT id, name FROM tags";
     private static final String READ_TAG = "SELECT id, name FROM tags WHERE id = ? OR name = ?";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -33,7 +33,7 @@ public class TagDaoImpl implements TagDao {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
-                PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[] {"id"});
+                PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[]{"id"});
                 statement.setString(1, tag.getName());
                 return statement;
             }, keyHolder);
@@ -55,6 +55,6 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public boolean delete(long id) {
-       return jdbcTemplate.update(DELETE_TAG, id) == 1;
+        return jdbcTemplate.update(DELETE_TAG, id) == 1;
     }
 }

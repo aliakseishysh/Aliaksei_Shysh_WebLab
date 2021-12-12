@@ -23,11 +23,6 @@ public class CertificateDaoImpl implements CertificateDao {
     private static final String SPACE_SEPARATOR = " ";
     private static final String CREATE_CERTIFICATE = "INSERT INTO gift_certificates(name, description, price, duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String READ_CERTIFICATE = "SELECT id, name, description, price, duration, create_date, last_update_date FROM gift_certificates";
-    private static final String READ_CERTIFICATE_BY_ID = "SELECT id, name, description, price, duration, create_date, last_update_date FROM gift_certificates WHERE id = ?";
-    private static final String READ_CERTIFICATES_WITH_TAGS = "SELECT gift_certificates.id, gift_certificates.name, description, price, duration, create_date, last_update_date, "
-            + "tags.id, tags.name "
-            + "FROM tags_gift_certificates INNER JOIN gift_certificates ON gift_certificates.id = tags_gift_certificates.certificate_id INNER JOIN tags ON "
-            + "tags.id = tags_gift_certificates.tag_id";
 
     private static final String READ_CERTIFICATES_WITH_TAGS_CTE = "WITH cte_ac AS (SELECT gift_certificates.id AS c_id, gift_certificates.name AS c_name, "
             + "description, price, duration, create_date, last_update_date, tags.id AS t_id, tags.name AS t_name "
@@ -44,20 +39,18 @@ public class CertificateDaoImpl implements CertificateDao {
     private static final String WHERE_TAGS_NAME = "WHERE tags.name = ?";
 
 
-
     private static final String DELETE_CERTIFICATE = "DELETE FROM gift_certificates WHERE id = ?";
     private static final String UPDATE_CERTIFICATE = "UPDATE gift_certificates SET id = COALESCE(?, id), name = COALESCE(?, name), description = COALESCE(?, description), "
             + "price = COALESCE(?, price), duration = COALESCE(?, duration), create_date = COALESCE(?, create_date), "
             + "last_update_date = COALESCE(?, last_update_date) WHERE id = ?";
 
-    // TODO Sort by date/name asc/desc
     private static final String PERCENT = "%";
     private static final String EMPTY_LINE = "";
     private static final String ORDER_BY = "ORDER BY";
     private static final String COMMA = ",";
     private static final String QUESTION = "?";
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public CertificateDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -85,17 +78,27 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(READ_CERTIFICATE, new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
-    //TODO split to different methods, smth like "editSqlQuery"
     @Override
     public List<CertificateTag> read(SearchData searchData) {
         List<String> queryParameters = new ArrayList<>();
         String resultQuery = READ_CERTIFICATES_WITH_TAGS_CTE;
+        resultQuery = tryAddSearchByTag(searchData, queryParameters, resultQuery);
+        resultQuery = tryAddSearchByPartialNameDescription(searchData, queryParameters, resultQuery);
+        resultQuery = tryAddOrderBy(searchData, queryParameters, resultQuery);
+        return jdbcTemplate.query(resultQuery, new CertificateTagExtractor(), queryParameters.toArray());
+    }
+
+    private String tryAddSearchByTag(SearchData searchData, List<String> queryParameters, String resultQuery) {
         if (searchData.getTagName() != null) {
             queryParameters.add(searchData.getTagName());
             resultQuery = String.format(resultQuery, WHERE_TAGS_NAME);
         } else {
             resultQuery = String.format(resultQuery, EMPTY_LINE);
         }
+        return resultQuery;
+    }
+
+    private String tryAddSearchByPartialNameDescription(SearchData searchData, List<String> queryParameters, String resultQuery) {
         if (searchData.getPartialCertificateName() != null && searchData.getPartialCertificateDescription() == null) {
             queryParameters.add(PERCENT + searchData.getPartialCertificateName() + PERCENT);
             resultQuery = String.join(SPACE_SEPARATOR, resultQuery, AND_CERTIFICATE_NAME_LIKE);
@@ -107,6 +110,10 @@ public class CertificateDaoImpl implements CertificateDao {
             queryParameters.add(PERCENT + searchData.getPartialCertificateDescription() + PERCENT);
             resultQuery = String.join(SPACE_SEPARATOR, resultQuery, AND_CERTIFICATE_NAME_AND_DESCRIPTION_LIKE);
         }
+        return resultQuery;
+    }
+
+    private String tryAddOrderBy(SearchData searchData, List<String> queryParameters, String resultQuery) {
         if (searchData.getSortData() != null && searchData.getSortData().size() >= 1) {
             resultQuery = String.join(SPACE_SEPARATOR, resultQuery, ORDER_BY);
             for (int i = 0; i < searchData.getSortData().size(); i++) {
@@ -117,8 +124,9 @@ public class CertificateDaoImpl implements CertificateDao {
                 }
             }
         }
-        return jdbcTemplate.query(resultQuery, new CertificateTagExtractor(), queryParameters.toArray());
+        return resultQuery;
     }
+
 
     @Override
     public boolean update(long id, GiftCertificate giftCertificate) {

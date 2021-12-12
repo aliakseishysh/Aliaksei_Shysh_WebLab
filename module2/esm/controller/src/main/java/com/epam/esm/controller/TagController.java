@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,15 +22,22 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/tags", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
-    private TagService tagService;
+    private final TagService tagService;
 
     @Autowired
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }
 
+    /**
+     * Creates new tag with specified parameters
+     *
+     * @param tagDto dto object for tag entity
+     * @return {@long} id of created object
+     * @throws EntityAlreadyExistsControllerException if entity already exists in the database
+     * @throws EntityIsNotValidControllerException    if {@tagDto} object is not valid
+     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Long> createTag(@RequestBody TagDto tagDto) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
         try {
             Long result = tagService.createTag(tagDto);
@@ -44,14 +50,25 @@ public class TagController {
 
     }
 
+    /**
+     * Reads all tags from database
+     *
+     * @return {@code List<TagDto>} with tags from database
+     */
     @GetMapping
     public ResponseEntity<List<TagDto>> findTags() {
         List<TagDto> tags = tagService.read();
         return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
     }
 
+    /**
+     * Deletes tag in the database with specified id
+     *
+     * @param tagDto dto object for tag entity
+     * @return
+     * @throws EntityIsNotValidControllerException
+     */
     @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Boolean> deleteTag(@RequestBody TagDto tagDto) throws EntityIsNotValidControllerException {
         try {
             return ResponseEntity.ok(tagService.deleteTag(tagDto));

@@ -22,9 +22,9 @@ import java.util.List;
 public class GiftCertificateTagServiceImpl implements GiftCertificateTagService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GiftCertificateTagServiceImpl.class);
-    private GiftCertificateService giftCertificateService;
-    private TagService tagService;
-    private TagCertificateDao tagCertificateDao;
+    private final GiftCertificateService giftCertificateService;
+    private final TagService tagService;
+    private final TagCertificateDao tagCertificateDao;
     @Autowired
     public GiftCertificateTagServiceImpl(GiftCertificateService giftCertificateService, TagService tagService, TagCertificateDao tagCertificateDao) {
         this.giftCertificateService = giftCertificateService;
@@ -48,8 +48,7 @@ public class GiftCertificateTagServiceImpl implements GiftCertificateTagService 
         return certificateUpdateResult;
     }
 
-    // TODO change return type to boolean?
-    public void createTagsForCertificate(long certificateId, List<TagDto> tags) throws EntityIsNotValidServiceException {
+    private void createTagsForCertificate(long certificateId, List<TagDto> tags) throws EntityIsNotValidServiceException {
         if (tags != null) {
             for (TagDto tag : tags) {
                 List<TagDto> tagList = tagService.read(tag);

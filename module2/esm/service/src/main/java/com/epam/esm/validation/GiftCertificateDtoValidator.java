@@ -8,11 +8,10 @@ import java.time.LocalDateTime;
 
 public class GiftCertificateDtoValidator {
 
-    private static final String CORRECT_DATETIME = "yyyy-MM-ddTHH:mm:ss.SSS";
-
     private static boolean validateIdInternal(Long id) {
         return id != null;
     }
+
     private static boolean validateNameInternal(String name) {
         return name != null;
     }
@@ -35,11 +34,11 @@ public class GiftCertificateDtoValidator {
 
     public static void validate(GiftCertificateDto certificateDto) throws EntityIsNotValidServiceException {
         if (!validateNameInternal(certificateDto.getName())
-            && !validateDescriptionInternal(certificateDto.getDescription())
-            && !validatePriceInternal(certificateDto.getPrice())
-            && !validateDurationInternal(certificateDto.getDuration())
-            && !validateDateInternal(certificateDto.getCreateDate())
-            && !validateDateInternal(certificateDto.getLastUpdateDate())
+                && !validateDescriptionInternal(certificateDto.getDescription())
+                && !validatePriceInternal(certificateDto.getPrice())
+                && !validateDurationInternal(certificateDto.getDuration())
+                && !validateDateInternal(certificateDto.getCreateDate())
+                && !validateDateInternal(certificateDto.getLastUpdateDate())
         ) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
 
@@ -65,10 +64,10 @@ public class GiftCertificateDtoValidator {
     }
 
     public static void validatePartial(GiftCertificateDto certificateDto) throws EntityIsNotValidServiceException {
-        if (certificateDto.getId() != null && !validateIdInternal(certificateDto.getId()) ) {
+        if (certificateDto.getId() != null && !validateIdInternal(certificateDto.getId())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
-        if (certificateDto.getName() != null && !validateNameInternal(certificateDto.getName()) ) {
+        if (certificateDto.getName() != null && !validateNameInternal(certificateDto.getName())) {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
         if (certificateDto.getDescription() != null && !validateDescriptionInternal(certificateDto.getDescription())) {

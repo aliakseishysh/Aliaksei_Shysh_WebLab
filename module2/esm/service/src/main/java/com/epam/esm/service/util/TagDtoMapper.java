@@ -13,7 +13,7 @@ public class TagDtoMapper {
     }
 
     public static List<Tag> toObject(List<TagDto> tagsDto) {
-        return tagsDto.stream().map((tagDto -> toObject(tagDto))).collect(Collectors.toList());
+        return tagsDto.stream().map((TagDtoMapper::toObject)).collect(Collectors.toList());
     }
 
     public static TagDto toDto(Tag tag) {
@@ -21,7 +21,7 @@ public class TagDtoMapper {
     }
 
     public static List<TagDto> toDto(List<Tag> tags) {
-        return tags.stream().map((tag -> toDto(tag))).collect(Collectors.toList());
+        return tags.stream().map((TagDtoMapper::toDto)).collect(Collectors.toList());
     }
 
 

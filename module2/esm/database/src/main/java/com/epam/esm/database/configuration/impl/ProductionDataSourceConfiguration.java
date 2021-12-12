@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @Component
 @Profile("production")
 public class ProductionDataSourceConfiguration implements DataSourceConfiguration {
-    private Environment environment;
+    private final Environment environment;
 
     @Autowired
     public ProductionDataSourceConfiguration(Environment environment) {

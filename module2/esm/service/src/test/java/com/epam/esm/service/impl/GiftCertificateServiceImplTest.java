@@ -1,6 +1,5 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.database.dao.TagDao;
 import com.epam.esm.database.dao.impl.CertificateDaoImpl;
 import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
@@ -42,13 +41,6 @@ public class GiftCertificateServiceImplTest {
     private GiftCertificateDto giftCertificateDto2;
     private GiftCertificate giftCertificate2;
     private SearchDataDto searchDataDto;
-    private SearchData searchData;
-    private TagDto tagDto1;
-    private TagDto tagDto2;
-    private TagDto tagDto3;
-    private Tag tag1;
-    private Tag tag2;
-    private Tag tag3;
 
     @BeforeEach
     public void init() {
@@ -88,12 +80,12 @@ public class GiftCertificateServiceImplTest {
                 LocalDateTime.parse("2021-01-01T09:10:12.200"),
                 LocalDateTime.parse("2021-01-01T09:10:12.300")
         );
-        tagDto1 = new TagDto(1L, "tag name 1");
-        tagDto2 = new TagDto(2L, "tag name 2");
-        tagDto3 = new TagDto(3L, "tag name 3");
-        tag1 = new Tag(1L, "tag name 1");
-        tag2 = new Tag(2L, "tag name 2");
-        tag3 = new Tag(3L, "tag name 3");
+        TagDto tagDto1 = new TagDto(1L, "tag name 1");
+        TagDto tagDto2 = new TagDto(2L, "tag name 2");
+        TagDto tagDto3 = new TagDto(3L, "tag name 3");
+        Tag tag1 = new Tag(1L, "tag name 1");
+        Tag tag2 = new Tag(2L, "tag name 2");
+        Tag tag3 = new Tag(3L, "tag name 3");
         certificateTagDto1 = new CertificateTagDto(giftCertificateDto1, new ArrayList<>());
         certificateTagDto1.getTags().add(tagDto1);
         certificateTagDto1.getTags().add(tagDto3);
@@ -111,7 +103,7 @@ public class GiftCertificateServiceImplTest {
                 new ArrayList<>()
         );
         searchDataDto.getSortData().add(new SearchDataDto.SortDto("cte_ac.c_name", "ASC"));
-        searchData = new SearchData(
+        SearchData searchData = new SearchData(
                 "tag name 1",
                 "1",
                 "1",
@@ -169,17 +161,17 @@ public class GiftCertificateServiceImplTest {
     public void updateTest() throws EntityIsNotValidServiceException {
         boolean expected = true;
         giftCertificateDto1.setId(null);
-        when(certificateDao.update(eq(1L), any(GiftCertificate.class))).thenReturn(expected);
+        when(certificateDao.update(eq(1L), any(GiftCertificate.class))).thenReturn(true);
         boolean actual = giftCertificateService.update(1L, giftCertificateDto1);
-        assertEquals(expected, actual);
+        assertEquals(true, actual);
     }
 
     @Test
     public void deleteTest() throws EntityIsNotValidServiceException {
         boolean expected = true;
-        when(certificateDao.delete(eq(1L))).thenReturn(expected);
+        when(certificateDao.delete(eq(1L))).thenReturn(true);
         boolean actual = giftCertificateService.delete(new GiftCertificateDto(1L, null, null, null, null, null, null));
-        assertEquals(expected, actual);
+        assertEquals(true, actual);
     }
 
 

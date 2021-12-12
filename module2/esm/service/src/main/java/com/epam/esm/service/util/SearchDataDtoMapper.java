@@ -22,10 +22,10 @@ public class SearchDataDtoMapper {
     }
 
     private static List<SearchDataDto.SortDto> toDto(List<SearchData.Sort> sort) {
-        return sort.stream().map((sortEl -> toDto(sortEl))).collect(Collectors.toList());
+        return sort.stream().map((SearchDataDtoMapper::toDto)).collect(Collectors.toList());
     }
     private static List<SearchData.Sort> toObject(List<SearchDataDto.SortDto> sortDto) {
-        return sortDto.stream().map((dto -> toObject(dto))).collect(Collectors.toList());
+        return sortDto.stream().map((SearchDataDtoMapper::toObject)).collect(Collectors.toList());
     }
 
     public static SearchData toObject(SearchDataDto searchDataDto) {

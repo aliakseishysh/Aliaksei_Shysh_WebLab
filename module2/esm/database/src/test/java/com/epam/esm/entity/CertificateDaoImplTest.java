@@ -6,6 +6,7 @@ import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.database.entity.Tag;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -160,15 +161,19 @@ public class CertificateDaoImplTest {
                 null, LocalDateTime.parse("2021-07-02T09:10:12.100")
         );
         boolean actual = certificateDao.update(2L, giftCertificate);
-        Assertions.assertEquals(true, actual);
+        Assertions.assertTrue(actual);
     }
 
     @Test
     @Order(8)
     public void deleteTest() {
         boolean actual = certificateDao.delete(2L);
-        Assertions.assertEquals(true, actual);
+        Assertions.assertTrue(actual);
     }
 
+    @AfterAll
+    public static void shutdownDatabase() {
+        embeddedDatabase.shutdown();
+    }
 
 }

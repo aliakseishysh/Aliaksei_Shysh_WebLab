@@ -17,7 +17,7 @@ public class CertificateTagDtoMapper {
 
     public static List<CertificateTag> toObject(List<CertificateTagDto> certificateTagDtoList) {
         return certificateTagDtoList.stream()
-                .map((certificateTagDto -> toObject(certificateTagDto)))
+                .map((CertificateTagDtoMapper::toObject))
                 .collect(Collectors.toList());
     }
 
@@ -30,7 +30,7 @@ public class CertificateTagDtoMapper {
 
     public static List<CertificateTagDto> toDto(List<CertificateTag> certificateTagList) {
         return certificateTagList.stream()
-                .map((certificateTag -> toDto(certificateTag)))
+                .map((CertificateTagDtoMapper::toDto))
                 .collect(Collectors.toList());
     }
 

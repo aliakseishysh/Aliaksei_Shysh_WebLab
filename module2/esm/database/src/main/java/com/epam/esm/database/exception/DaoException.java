@@ -1,7 +1,5 @@
 package com.epam.esm.database.exception;
 
-import java.security.PrivilegedActionException;
-
 public class DaoException extends Exception{
 
     public DaoException() {

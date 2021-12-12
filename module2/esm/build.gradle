@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.springframework:spring-web:5.3.13'
     implementation 'org.springframework:spring-context:5.3.13'
     implementation 'org.springframework:spring-webmvc:5.3.13'
-    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+    testImplementation 'ch.qos.logback:logback-classic:1.2.7'
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 }
 

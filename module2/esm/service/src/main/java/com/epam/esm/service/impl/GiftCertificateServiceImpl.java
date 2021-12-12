@@ -1,7 +1,6 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.CertificateDao;
-import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.dto.CertificateTagDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
@@ -19,7 +18,7 @@ import java.util.List;
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-    private CertificateDao certificateDao;
+    private final CertificateDao certificateDao;
     @Autowired
     public GiftCertificateServiceImpl(CertificateDao certificateDao) {
         this.certificateDao = certificateDao;

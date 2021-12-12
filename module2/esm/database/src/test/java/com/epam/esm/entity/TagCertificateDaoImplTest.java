@@ -1,10 +1,8 @@
 package com.epam.esm.entity;
 
-import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.database.dao.TagCertificateDao;
-import com.epam.esm.database.dao.impl.CertificateDaoImpl;
 import com.epam.esm.database.dao.impl.TagCertificateDaoImpl;
-import com.epam.esm.database.entity.GiftCertificate;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -36,8 +34,13 @@ public class TagCertificateDaoImplTest {
     @Test
     @Order(1)
     public void createTest() {
-        boolean actual = tagCertificateDao.create(3L,1L);
-        Assertions.assertEquals(true, actual);
+        boolean actual = tagCertificateDao.create(3L, 1L);
+        Assertions.assertTrue(actual);
+    }
+
+    @AfterAll
+    public static void shutdownDatabase() {
+        embeddedDatabase.shutdown();
     }
 
 }

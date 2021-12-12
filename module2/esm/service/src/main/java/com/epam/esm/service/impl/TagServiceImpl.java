@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private TagDao tagDao;
+    private final TagDao tagDao;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao) {
