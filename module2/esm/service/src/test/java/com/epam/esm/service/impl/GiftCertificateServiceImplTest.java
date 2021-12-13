@@ -134,7 +134,7 @@ public class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void readByEmptySearchDataTest() {
+    public void readByEmptySearchDataTest() throws EntityIsNotValidServiceException {
         List<CertificateTagDto> expected = new ArrayList<>();
         expected.add(certificateTagDto1);
         expected.add(certificateTagDto2);
@@ -147,7 +147,7 @@ public class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void readBySearchDataTest() {
+    public void readBySearchDataTest() throws EntityIsNotValidServiceException {
         List<CertificateTagDto> expected = new ArrayList<>();
         expected.add(certificateTagDto1);
         List<CertificateTag> returnFromDao = new ArrayList<>();
@@ -159,19 +159,17 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     public void updateTest() throws EntityIsNotValidServiceException {
-        boolean expected = true;
         giftCertificateDto1.setId(null);
         when(certificateDao.update(eq(1L), any(GiftCertificate.class))).thenReturn(true);
         boolean actual = giftCertificateService.update(1L, giftCertificateDto1);
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
 
     @Test
     public void deleteTest() throws EntityIsNotValidServiceException {
-        boolean expected = true;
         when(certificateDao.delete(eq(1L))).thenReturn(true);
         boolean actual = giftCertificateService.delete(new GiftCertificateDto(1L, null, null, null, null, null, null));
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
 
 

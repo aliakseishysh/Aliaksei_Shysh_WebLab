@@ -10,6 +10,7 @@ import com.epam.esm.service.util.CertificateTagDtoMapper;
 import com.epam.esm.service.util.GiftCertificateDtoMapper;
 import com.epam.esm.service.util.SearchDataDtoMapper;
 import com.epam.esm.validation.GiftCertificateDtoValidator;
+import com.epam.esm.validation.SearchDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<CertificateTagDto> read(SearchDataDto searchDataDto) {
+    public List<CertificateTagDto> read(SearchDataDto searchDataDto) throws EntityIsNotValidServiceException {
+        SearchDataValidator.validate(searchDataDto);
         return CertificateTagDtoMapper.toDto(certificateDao.read(SearchDataDtoMapper.toObject(searchDataDto)));
     }
 

@@ -33,26 +33,30 @@ public class GiftCertificateDtoValidator {
     }
 
     public static void validate(GiftCertificateDto certificateDto) throws EntityIsNotValidServiceException {
-        if (!validateNameInternal(certificateDto.getName())
-                && !validateDescriptionInternal(certificateDto.getDescription())
-                && !validatePriceInternal(certificateDto.getPrice())
-                && !validateDurationInternal(certificateDto.getDuration())
-                && !validateDateInternal(certificateDto.getCreateDate())
-                && !validateDateInternal(certificateDto.getLastUpdateDate())
+        if (validateNameInternal(certificateDto.getName())
+                && validateDescriptionInternal(certificateDto.getDescription())
+                && validatePriceInternal(certificateDto.getPrice())
+                && validateDurationInternal(certificateDto.getDuration())
+                && validateDateInternal(certificateDto.getCreateDate())
+                && validateDateInternal(certificateDto.getLastUpdateDate())
         ) {
+            // is valid
+        } else {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
-
         }
     }
 
     public static void validateWithId(GiftCertificateDto certificateDto) throws EntityIsNotValidServiceException {
-        if (!validateIdInternal(certificateDto.getId())
-                && !validateNameInternal(certificateDto.getName())
-                && !validateDescriptionInternal(certificateDto.getDescription())
-                && !validatePriceInternal(certificateDto.getPrice())
-                && !validateDurationInternal(certificateDto.getDuration())
-                && !validateDateInternal(certificateDto.getCreateDate())
-                && !validateDateInternal(certificateDto.getLastUpdateDate())) {
+        if (validateIdInternal(certificateDto.getId())
+                && validateNameInternal(certificateDto.getName())
+                && validateDescriptionInternal(certificateDto.getDescription())
+                && validatePriceInternal(certificateDto.getPrice())
+                && validateDurationInternal(certificateDto.getDuration())
+                && validateDateInternal(certificateDto.getCreateDate())
+                && validateDateInternal(certificateDto.getLastUpdateDate())
+        ) {
+            // is valid
+        } else {
             throw new EntityIsNotValidServiceException("Entity " + certificateDto + " is not valid.");
         }
     }

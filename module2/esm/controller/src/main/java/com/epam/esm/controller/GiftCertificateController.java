@@ -67,9 +67,14 @@ public class GiftCertificateController {
      * @return {@code ResponseEntity<List<GiftCertificateDto>>} with {@code GiftCertificateDto} objects
      */
     @PostMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CertificateTagDto>> findCertificatesWithSearchData(@RequestBody SearchDataDto searchDataDto) {
-        List<CertificateTagDto> certificates = certificateService.read(searchDataDto);
-        return ResponseEntity.ok(certificates);
+    public ResponseEntity<List<CertificateTagDto>> findCertificatesWithSearchData(@RequestBody SearchDataDto searchDataDto) throws EntityIsNotValidControllerException {
+        try {
+            List<CertificateTagDto> certificates = certificateService.read(searchDataDto);
+            return ResponseEntity.ok(certificates);
+        } catch (EntityIsNotValidServiceException exception) {
+            throw new EntityIsNotValidControllerException(exception);
+        }
+
     }
 
     /**

@@ -65,7 +65,7 @@ public class TagServiceImplTest {
         boolean expected = true;
         when(tagDao.delete(1L)).thenReturn(true);
         boolean actual = tagService.deleteTag(new TagDto(1L, null));
-        assertEquals(true, actual);
+        assertTrue(actual);
     }
 
 

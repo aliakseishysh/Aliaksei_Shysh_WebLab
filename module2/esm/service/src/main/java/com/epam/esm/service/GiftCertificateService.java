@@ -13,7 +13,7 @@ public interface GiftCertificateService {
 
     List<GiftCertificateDto> read();
 
-    List<CertificateTagDto> read(SearchDataDto searchData);
+    List<CertificateTagDto> read(SearchDataDto searchData) throws EntityIsNotValidServiceException;
 
     boolean update(long id, GiftCertificateDto certificate) throws EntityIsNotValidServiceException;
 

@@ -14,15 +14,13 @@ public class TagDtoValidator {
     }
 
     public static void validate(String name) throws EntityIsNotValidServiceException {
-        if (validateInternal(name)) {
-        } else {
+        if (!validateInternal(name)) {
             throw new EntityIsNotValidServiceException("Entity TagDto name=" + name + " is not valid.");
         }
     }
 
     public static void validate(Long tagId) throws EntityIsNotValidServiceException {
-        if (validateInternal(tagId)) {
-        } else {
+        if (!validateInternal(tagId)) {
             throw new EntityIsNotValidServiceException("Entity TagDto id=" + tagId + " is not valid.");
         }
     }

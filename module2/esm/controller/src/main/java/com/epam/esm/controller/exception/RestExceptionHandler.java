@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
+
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -32,6 +34,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .errorMessage(exception.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @ExceptionHandler({SQLException.class})
+    public ResponseEntity<ResponseEntityException> unhandledSql(SQLException exception) {
+        ResponseEntityException response = ResponseEntityException.builder()
+                .errorCode(exception.getErrorCode())
+                .errorMessage(exception.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }

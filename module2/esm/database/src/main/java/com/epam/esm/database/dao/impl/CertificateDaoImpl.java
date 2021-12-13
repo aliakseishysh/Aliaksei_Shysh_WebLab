@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.esm.database.dao.SqlKeyWord.*;
+
 @Repository
 public class CertificateDaoImpl implements CertificateDao {
 
@@ -44,11 +46,7 @@ public class CertificateDaoImpl implements CertificateDao {
             + "price = COALESCE(?, price), duration = COALESCE(?, duration), create_date = COALESCE(?, create_date), "
             + "last_update_date = COALESCE(?, last_update_date) WHERE id = ?";
 
-    private static final String PERCENT = "%";
-    private static final String EMPTY_LINE = "";
-    private static final String ORDER_BY = "ORDER BY";
-    private static final String COMMA = ",";
-    private static final String QUESTION = "?";
+
 
     private final JdbcTemplate jdbcTemplate;
 

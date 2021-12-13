@@ -73,7 +73,7 @@ public class GiftCertificateControllerTest {
     }
 
     @Test
-    public void findCertificatesWithSearchDataTest() {
+    public void findCertificatesWithSearchDataTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
         List<CertificateTagDto> expected = new ArrayList<>();
         CertificateTagDto certificateTagDto = new CertificateTagDto();
         certificateTagDto.setCertificate(new GiftCertificateDto(
