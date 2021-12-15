@@ -1,0 +1,5 @@
+group 'service'
+
+dependencies {
+    implementation project(":database")
+}

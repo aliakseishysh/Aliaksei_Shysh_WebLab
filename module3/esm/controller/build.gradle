@@ -1,0 +1,5 @@
+group 'controller'
+
+dependencies {
+    implementation project(":service")
+}
