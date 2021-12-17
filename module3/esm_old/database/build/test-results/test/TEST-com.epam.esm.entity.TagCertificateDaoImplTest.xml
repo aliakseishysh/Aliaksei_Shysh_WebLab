@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.epam.esm.entity.TagCertificateDaoImplTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-15T09:14:56" hostname="HOME-PC" time="0.004">
-  <properties/>
-  <testcase name="createTest()" classname="com.epam.esm.entity.TagCertificateDaoImplTest" time="0.004"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[[Test worker] INFO org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:testdb;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-[Test worker] INFO org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory - Shutting down embedded database: url='jdbc:h2:mem:testdb;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false'
-]]></system-err>
-</testsuite>
