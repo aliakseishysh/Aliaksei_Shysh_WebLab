@@ -5,6 +5,8 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
+import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
+import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.util.TagMapper;
@@ -44,17 +46,12 @@ public class TagController {
      * @throws EntityIsNotValidControllerException    if {@tagDto} object is not valid
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto, BindingResult bindingResult) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
+    public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
         try {
-            if (bindingResult != null && bindingResult.hasErrors()) {
-                throw new EntityIsNotValidControllerException("Object with field name=" + createTagDto.getName() + " is not valid");
-            }
             Long result = tagService.createTag(createTagDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (EntityAlreadyExistsServiceException exception) {
+        } catch (EntityAlreadyExistsServiceException | EntityIsNotValidServiceException exception) {
             throw new EntityAlreadyExistsControllerException(exception);
-        } catch (EntityIsNotValidServiceException exception) {
-            throw new EntityIsNotValidControllerException(exception);
         }
 
     }
@@ -73,16 +70,33 @@ public class TagController {
     /**
      * Deletes tag in the com.epam.esm.database with specified id
      *
-     * @param tagDto dto object for tag entity
+     * @param deleteTagByIdDto dto object for tag id
      * @return
      * @throws EntityIsNotValidControllerException
      */
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteTag(@RequestBody TagDto tagDto) throws EntityIsNotValidControllerException {
+    @DeleteMapping(path = "/delete/id")
+    public ResponseEntity<Boolean> deleteTagById(@RequestBody @Valid DeleteTagByIdDto deleteTagByIdDto) throws EntityIsNotValidControllerException {
         try {
-            return ResponseEntity.ok(tagService.deleteTag(tagDto));
+            return ResponseEntity.ok(tagService.deleteTag(deleteTagByIdDto));
         } catch (EntityIsNotValidServiceException exception) {
             throw new EntityIsNotValidControllerException(exception);
         }
     }
+
+    /**
+     * Deletes tag in the com.epam.esm.database with specified id
+     *
+     * @param deleteTagByNameDto dto object for tag id
+     * @return
+     * @throws EntityIsNotValidControllerException
+     */
+    @DeleteMapping(path = "/delete/name")
+    public ResponseEntity<Boolean> deleteTagByName(@RequestBody @Valid DeleteTagByNameDto deleteTagByNameDto) throws EntityIsNotValidControllerException {
+        try {
+            return ResponseEntity.ok(tagService.deleteTag(deleteTagByNameDto));
+        } catch (EntityIsNotValidServiceException exception) {
+            throw new EntityIsNotValidControllerException(exception);
+        }
+    }
+
 }

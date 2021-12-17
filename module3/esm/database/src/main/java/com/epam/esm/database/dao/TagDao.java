@@ -15,4 +15,5 @@ public interface TagDao {
 
     boolean delete(long id);
 
+    boolean delete(String name);
 }

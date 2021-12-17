@@ -21,6 +21,7 @@ public class TagDaoImpl implements TagDao {
     private static final String READ_TAGS = "SELECT id, name FROM tags";
     private static final String READ_TAG = "SELECT id, name FROM tags WHERE id = ? OR name = ?";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
+    private static final String DELETE_TAG_BY_NAME = "DELETE FROM tags WHERE name = ?";
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -56,5 +57,10 @@ public class TagDaoImpl implements TagDao {
     @Override
     public boolean delete(long id) {
         return jdbcTemplate.update(DELETE_TAG, id) == 1;
+    }
+
+    @Override
+    public boolean delete(String name) {
+        return jdbcTemplate.update(DELETE_TAG_BY_NAME, name) == 1;
     }
 }

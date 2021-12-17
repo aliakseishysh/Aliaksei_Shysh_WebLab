@@ -6,9 +6,10 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
+import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
+import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
-import com.epam.esm.service.util.TagMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class TagControllerTest {
         CreateTagDto expected1 = new CreateTagDto("tag name 1");
         Long expected2 = 1L;
         when(tagService.createTag(any())).thenReturn(expected2);
-        ResponseEntity<Long> actual2 = tagController.createTag(expected1, null);
+        ResponseEntity<Long> actual2 = tagController.createTag(expected1);
         ArgumentCaptor<CreateTagDto> argumentCaptor = ArgumentCaptor.forClass(CreateTagDto.class);
         verify(tagService).createTag(argumentCaptor.capture());
         assertEquals(expected1, argumentCaptor.getValue());
@@ -57,11 +57,20 @@ public class TagControllerTest {
     }
 
     @Test
-    public void deleteTagTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
-        TagDto tagDto = new TagDto(1L, null);
+    public void deleteTagByIdTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
+        DeleteTagByIdDto deleteTagByIdDto = new DeleteTagByIdDto(1L);
         Boolean expected = true;
-        doReturn(true).when(tagService).deleteTag(tagDto);
-        ResponseEntity<Boolean> actual = tagController.deleteTag(tagDto);
+        doReturn(true).when(tagService).deleteTag(deleteTagByIdDto);
+        ResponseEntity<Boolean> actual = tagController.deleteTagById(deleteTagByIdDto);
+        assertEquals(true, actual.getBody());
+    }
+
+    @Test
+    public void deleteTagByNameTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
+        DeleteTagByNameDto deleteTagByIdDto = new DeleteTagByNameDto("tag name 1");
+        Boolean expected = true;
+        doReturn(true).when(tagService).deleteTag(deleteTagByIdDto);
+        ResponseEntity<Boolean> actual = tagController.deleteTagByName(deleteTagByIdDto);
         assertEquals(true, actual.getBody());
     }
 

@@ -5,6 +5,8 @@ import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
+import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
+import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.util.TagMapper;
@@ -46,8 +48,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public boolean deleteTag(TagDto tagDto) throws EntityIsNotValidServiceException {
-        TagDtoValidator.validate(tagDto.getId());
-        return tagDao.delete(TagMapper.toObject(tagDto).getId());
+    public boolean deleteTag(DeleteTagByIdDto deleteTagByIdDto) {
+        return tagDao.delete(deleteTagByIdDto.getId());
+    }
+    @Override
+    public boolean deleteTag(DeleteTagByNameDto deleteTagByNameDto) {
+        return tagDao.delete(deleteTagByNameDto.getName());
     }
 }
