@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.dto.CertificateTagDto;
+import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
@@ -26,8 +27,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public long create(GiftCertificateDto certificate) throws EntityIsNotValidServiceException {
-        GiftCertificateDtoValidator.validate(certificate);
+    public long create(CreateGiftCertificateDto certificate) throws EntityIsNotValidServiceException {
+        // GiftCertificateDtoValidator.validate(certificate);
         return certificateDao.create(GiftCertificateMapper.toObject(certificate));
     }
     @Override

@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 
@@ -12,7 +13,7 @@ public interface TagService {
 
     List<TagDto> read(TagDto tag) throws EntityIsNotValidServiceException;
 
-    long createTag(TagDto tag) throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException;
+    long createTag(CreateTagDto createTagDto) throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException;
 
     boolean deleteTag(TagDto tagDto) throws EntityIsNotValidServiceException;
 

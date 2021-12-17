@@ -5,9 +5,12 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftCertificateTagService;
 import com.epam.esm.service.dto.CertificateTagDto;
+import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,21 +38,18 @@ public class GiftCertificateControllerTest {
 
     @Test
     public void createCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
-        GiftCertificateDto giftCertificateDto = new GiftCertificateDto(
-                1L,
-                "certificate name 1",
-                "certificate description 1",
-                BigDecimal.valueOf(1),
-                1,
-                LocalDateTime.parse("2021-01-01T09:10:12.100"),
-                LocalDateTime.parse("2021-01-01T09:10:12.200")
+        List<CreateTagDto> tagsDto = new ArrayList<>();
+        tagsDto.add(new CreateTagDto("tag name 1"));
+        CreateUpdateCertificateTagDto createUpdateCertificateTagDto = new CreateUpdateCertificateTagDto(
+                new CreateGiftCertificateDto(
+                        "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                        LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
+                ),
+                tagsDto
         );
-        List<TagDto> tagsDto = new ArrayList<>();
-        tagsDto.add(new TagDto(1L, "tag name 1"));
-        CertificateTagDto certificateTagDto = new CertificateTagDto(giftCertificateDto, tagsDto);
         Long expected = 1L;
-        doReturn(expected).when(giftCertificateTagService).create(certificateTagDto);
-        ResponseEntity<Long> responseEntity = giftCertificateController.createCertificate(certificateTagDto);
+        doReturn(expected).when(giftCertificateTagService).create(createUpdateCertificateTagDto);
+        ResponseEntity<Long> responseEntity = giftCertificateController.createCertificate(createUpdateCertificateTagDto);
         assertEquals(expected, responseEntity.getBody());
     }
 

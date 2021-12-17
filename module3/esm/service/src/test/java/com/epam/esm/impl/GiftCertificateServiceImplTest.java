@@ -6,6 +6,7 @@ import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
+import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.dto.TagDto;
@@ -118,9 +119,13 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     public void createTest() throws EntityIsNotValidServiceException {
+        CreateGiftCertificateDto createGiftCertificateDto = new CreateGiftCertificateDto(
+                "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
+        );
         Long expected = 1L;
         when(certificateDao.create(any(GiftCertificate.class))).thenReturn(expected);
-        Long actual = giftCertificateService.create(giftCertificateDto1);
+        Long actual = giftCertificateService.create(createGiftCertificateDto);
         assertEquals(expected, actual);
     }
 

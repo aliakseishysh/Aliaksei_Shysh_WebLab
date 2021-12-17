@@ -4,8 +4,10 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftCertificateTagService;
 import com.epam.esm.service.dto.CertificateTagDto;
+import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
+import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,9 +42,9 @@ public class GiftCertificateController {
      * @throws EntityIsNotValidControllerException if {@certificateTagDto} object is not valid
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createCertificate(@RequestBody CertificateTagDto certificateTagDto) throws EntityIsNotValidControllerException {
+    public ResponseEntity<Long> createCertificate(@RequestBody CreateUpdateCertificateTagDto createUpdateCertificateTagDto) throws EntityIsNotValidControllerException {
         try {
-            Long result = giftCertificateTagService.create(certificateTagDto);
+            Long result = giftCertificateTagService.create(createUpdateCertificateTagDto);
             return ResponseEntity.ok(result);
         } catch (EntityIsNotValidServiceException exception) {
             throw new EntityIsNotValidControllerException(exception);

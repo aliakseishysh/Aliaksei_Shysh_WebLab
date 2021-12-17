@@ -4,6 +4,7 @@ import com.epam.esm.database.dao.TagDao;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.util.TagMapper;
@@ -35,9 +36,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public long createTag(TagDto tagDto) throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException {
+    public long createTag(CreateTagDto tagDto) throws EntityAlreadyExistsServiceException {
         try {
-            TagDtoValidator.validate(tagDto.getName());
+            //TagDtoValidator.validate(tagDto.getName());
             return tagDao.create(TagMapper.toObject(tagDto));
         } catch (EntityAlreadyExistsDaoException e) {
             throw new EntityAlreadyExistsServiceException(e);

@@ -5,8 +5,10 @@ import com.epam.esm.controller.exception.EntityAlreadyExistsControllerException;
 import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
+import com.epam.esm.service.util.TagMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -14,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +36,11 @@ public class TagControllerTest {
 
     @Test
     public void createTagTest() throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException, EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
-        TagDto expected1 = new TagDto(null, "tag name 1");
+        CreateTagDto expected1 = new CreateTagDto("tag name 1");
         Long expected2 = 1L;
         when(tagService.createTag(any())).thenReturn(expected2);
-        ResponseEntity<Long> actual2 = tagController.createTag(expected1);
-        ArgumentCaptor<TagDto> argumentCaptor = ArgumentCaptor.forClass(TagDto.class);
+        ResponseEntity<Long> actual2 = tagController.createTag(expected1, null);
+        ArgumentCaptor<CreateTagDto> argumentCaptor = ArgumentCaptor.forClass(CreateTagDto.class);
         verify(tagService).createTag(argumentCaptor.capture());
         assertEquals(expected1, argumentCaptor.getValue());
         assertEquals(expected2, actual2.getBody());

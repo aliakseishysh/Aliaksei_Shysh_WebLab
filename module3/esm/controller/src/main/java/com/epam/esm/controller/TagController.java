@@ -4,12 +4,16 @@ import com.epam.esm.controller.exception.EntityAlreadyExistsControllerException;
 import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
+import com.epam.esm.service.util.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping(value = "/tags", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TagController {
@@ -32,15 +38,18 @@ public class TagController {
     /**
      * Creates new tag with specified parameters
      *
-     * @param tagDto dto object for tag entity
+     * @param createTagDto dto object for tag entity
      * @return {@long} id of created object
      * @throws EntityAlreadyExistsControllerException if entity already exists in the com.epam.esm.database
      * @throws EntityIsNotValidControllerException    if {@tagDto} object is not valid
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createTag(@RequestBody TagDto tagDto) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
+    public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto, BindingResult bindingResult) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
         try {
-            Long result = tagService.createTag(tagDto);
+            if (bindingResult != null && bindingResult.hasErrors()) {
+                throw new EntityIsNotValidControllerException("Object with field name=" + createTagDto.getName() + " is not valid");
+            }
+            Long result = tagService.createTag(createTagDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (EntityAlreadyExistsServiceException exception) {
             throw new EntityAlreadyExistsControllerException(exception);

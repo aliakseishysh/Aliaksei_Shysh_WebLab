@@ -7,14 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
 
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final int CONSTRAINT_VIOLATION_ERROR_CODE = 40001;
 
     @ExceptionHandler({EntityAlreadyExistsControllerException.class})
     public ResponseEntity<ResponseEntityException> onDuplicateEntity(EntityAlreadyExistsControllerException exception) {
@@ -30,7 +34,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({EntityIsNotValidControllerException.class})
     public ResponseEntity<ResponseEntityException> onEntityInvalid(EntityIsNotValidControllerException exception) {
         ResponseEntityException response = ResponseEntityException.builder()
-                .errorCode(EntityAlreadyExistsControllerException.ERROR_CODE)
+                .errorCode(EntityIsNotValidControllerException.ERROR_CODE)
+                .errorMessage(exception.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResponseEntityException> handleConstraintViolationException(ConstraintViolationException exception) throws EntityIsNotValidControllerException {
+        ResponseEntityException response = ResponseEntityException.builder()
+                .errorCode(EntityIsNotValidControllerException.ERROR_CODE)
                 .errorMessage(exception.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -6,8 +6,11 @@ import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
+import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,9 +87,18 @@ public class GiftCertificateTagServiceImplTest {
 
     @Test
     public void createTest() throws EntityIsNotValidServiceException {
+        List<CreateTagDto> tagsDto = new ArrayList<>();
+        tagsDto.add(new CreateTagDto("tag name 1"));
+        CreateUpdateCertificateTagDto createUpdateCertificateTagDto = new CreateUpdateCertificateTagDto(
+                new CreateGiftCertificateDto(
+                        "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                        LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
+                ),
+                tagsDto
+        );
         Long expected = 1L;
         when(giftCertificateService.create(any())).thenReturn(expected);
-        Long actual = giftCertificateTagService.create(certificateTagDto);
+        Long actual = giftCertificateTagService.create(createUpdateCertificateTagDto);
         assertEquals(expected, actual);
     }
 

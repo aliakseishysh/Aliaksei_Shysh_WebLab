@@ -21,6 +21,18 @@ public class GiftCertificateMapper {
         );
     }
 
+    public static GiftCertificate toObject(CreateGiftCertificateDto createGiftCertificateDto) {
+        return new GiftCertificate(
+                null,
+                createGiftCertificateDto.getName(),
+                createGiftCertificateDto.getDescription(),
+                createGiftCertificateDto.getPrice(),
+                createGiftCertificateDto.getDuration(),
+                createGiftCertificateDto.getCreateDate(),
+                createGiftCertificateDto.getLastUpdateDate()
+        );
+    }
+
     public static GiftCertificateDto toDto(GiftCertificate certificate) {
         return new GiftCertificateDto(
                 certificate.getId(),
