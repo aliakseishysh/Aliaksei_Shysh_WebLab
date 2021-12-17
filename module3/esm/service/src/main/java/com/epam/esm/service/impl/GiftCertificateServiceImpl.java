@@ -7,7 +7,7 @@ import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.util.CertificateTagDtoMapper;
-import com.epam.esm.service.util.GiftCertificateDtoMapper;
+import com.epam.esm.service.util.GiftCertificateMapper;
 import com.epam.esm.service.util.SearchDataDtoMapper;
 import com.epam.esm.service.validation.GiftCertificateDtoValidator;
 import com.epam.esm.service.validation.SearchDataValidator;
@@ -28,11 +28,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public long create(GiftCertificateDto certificate) throws EntityIsNotValidServiceException {
         GiftCertificateDtoValidator.validate(certificate);
-        return certificateDao.create(GiftCertificateDtoMapper.toObject(certificate));
+        return certificateDao.create(GiftCertificateMapper.toObject(certificate));
     }
     @Override
     public List<GiftCertificateDto> read() {
-        return GiftCertificateDtoMapper.toDto(certificateDao.read());
+        return GiftCertificateMapper.toDto(certificateDao.read());
     }
 
     @Override
@@ -44,13 +44,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public boolean update(long id, GiftCertificateDto certificate) throws EntityIsNotValidServiceException {
         GiftCertificateDtoValidator.validatePartial(certificate);
-        return certificateDao.update(id, GiftCertificateDtoMapper.toObject(certificate));
+        return certificateDao.update(id, GiftCertificateMapper.toObject(certificate));
     }
 
     @Override
     public boolean delete(GiftCertificateDto giftCertificateDto) throws EntityIsNotValidServiceException {
         GiftCertificateDtoValidator.validateId(giftCertificateDto.getId());
-        return certificateDao.delete(GiftCertificateDtoMapper.toObject(giftCertificateDto).getId());
+        return certificateDao.delete(GiftCertificateMapper.toObject(giftCertificateDto).getId());
     }
 
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.epam.esm.service.impl.TagServiceImplTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-12-15T09:15:03" hostname="HOME-PC" time="0.071">
+  <properties/>
+  <testcase name="deleteTagTest()" classname="com.epam.esm.service.impl.TagServiceImplTest" time="0.047"/>
+  <testcase name="readTest()" classname="com.epam.esm.service.impl.TagServiceImplTest" time="0.007"/>
+  <testcase name="readByTagDtoTest()" classname="com.epam.esm.service.impl.TagServiceImplTest" time="0.004"/>
+  <testcase name="createTagTest()" classname="com.epam.esm.service.impl.TagServiceImplTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

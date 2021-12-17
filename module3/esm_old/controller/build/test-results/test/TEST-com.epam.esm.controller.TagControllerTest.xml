@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.epam.esm.controller.TagControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-12-15T09:14:48" hostname="HOME-PC" time="0.116">
+  <properties/>
+  <testcase name="deleteTagTest()" classname="com.epam.esm.controller.TagControllerTest" time="0.069"/>
+  <testcase name="findTagsTest()" classname="com.epam.esm.controller.TagControllerTest" time="0.005"/>
+  <testcase name="createTagTest()" classname="com.epam.esm.controller.TagControllerTest" time="0.039"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

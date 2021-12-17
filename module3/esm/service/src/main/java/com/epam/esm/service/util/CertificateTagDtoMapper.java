@@ -10,8 +10,8 @@ public class CertificateTagDtoMapper {
 
     public static CertificateTag toObject(CertificateTagDto certificateTagDto) {
         return new CertificateTag(
-                GiftCertificateDtoMapper.toObject(certificateTagDto.getCertificate()),
-                TagDtoMapper.toObject(certificateTagDto.getTags())
+                GiftCertificateMapper.toObject(certificateTagDto.getCertificate()),
+                TagMapper.toObject(certificateTagDto.getTags())
         );
     }
 
@@ -23,8 +23,8 @@ public class CertificateTagDtoMapper {
 
     public static CertificateTagDto toDto(CertificateTag certificateTag) {
         return new CertificateTagDto(
-                GiftCertificateDtoMapper.toDto(certificateTag.getCertificate()),
-                TagDtoMapper.toDto(certificateTag.getTags())
+                GiftCertificateMapper.toDto(certificateTag.getCertificate()),
+                TagMapper.toDto(certificateTag.getTags())
         );
     }
 

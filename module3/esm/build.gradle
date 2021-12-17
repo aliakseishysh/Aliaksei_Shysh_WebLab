@@ -53,6 +53,7 @@ subprojects {
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 		implementation 'org.springframework.boot:spring-boot-configuration-processor'
+		implementation 'org.hibernate.validator:hibernate-validator:7.0.2.Final'
 	}
 	configurations {
 		compileOnly {
