@@ -3,15 +3,15 @@ package com.epam.esm.service.impl;
 import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateDto;
+import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.util.CertificateTagDtoMapper;
 import com.epam.esm.service.util.GiftCertificateMapper;
 import com.epam.esm.service.util.SearchDataDtoMapper;
-import com.epam.esm.service.validation.GiftCertificateDtoValidator;
-import com.epam.esm.service.validation.SearchDataValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +27,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public long create(CreateGiftCertificateDto certificate) throws EntityIsNotValidServiceException {
-        // GiftCertificateDtoValidator.validate(certificate);
+    public long create(CreateCertificateDto certificate) throws EntityIsNotValidServiceException {
         return certificateDao.create(GiftCertificateMapper.toObject(certificate));
     }
     @Override
@@ -38,20 +37,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<CertificateTagDto> read(SearchDataDto searchDataDto) throws EntityIsNotValidServiceException {
-        SearchDataValidator.validate(searchDataDto);
         return CertificateTagDtoMapper.toDto(certificateDao.read(SearchDataDtoMapper.toObject(searchDataDto)));
     }
 
     @Override
-    public boolean update(long id, GiftCertificateDto certificate) throws EntityIsNotValidServiceException {
-        GiftCertificateDtoValidator.validatePartial(certificate);
+    public boolean update(long id, UpdateCertificateDto certificate) {
         return certificateDao.update(id, GiftCertificateMapper.toObject(certificate));
     }
 
     @Override
-    public boolean delete(GiftCertificateDto giftCertificateDto) throws EntityIsNotValidServiceException {
-        GiftCertificateDtoValidator.validateId(giftCertificateDto.getId());
-        return certificateDao.delete(GiftCertificateMapper.toObject(giftCertificateDto).getId());
+    public boolean delete(DeleteCertificateByIdDto deleteCertificateByIdDto) {
+        return certificateDao.delete(deleteCertificateByIdDto.getId());
     }
 
 }

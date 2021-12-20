@@ -1,8 +1,9 @@
 package com.epam.esm.service.util;
 
 import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificate toObject(CreateGiftCertificateDto createGiftCertificateDto) {
+    public static GiftCertificate toObject(CreateCertificateDto createGiftCertificateDto) {
         return new GiftCertificate(
                 null,
                 createGiftCertificateDto.getName(),
@@ -30,6 +31,18 @@ public class GiftCertificateMapper {
                 createGiftCertificateDto.getDuration(),
                 createGiftCertificateDto.getCreateDate(),
                 createGiftCertificateDto.getLastUpdateDate()
+        );
+    }
+
+    public static GiftCertificate toObject(UpdateCertificateDto updateCertificateDto) {
+        return new GiftCertificate(
+                null,
+                updateCertificateDto.getName(),
+                updateCertificateDto.getDescription(),
+                updateCertificateDto.getPrice(),
+                updateCertificateDto.getDuration(),
+                updateCertificateDto.getCreateDate(),
+                updateCertificateDto.getLastUpdateDate()
         );
     }
 
@@ -45,7 +58,7 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificateDto toDto(CreateGiftCertificateDto createGiftCertificateDto) {
+    public static GiftCertificateDto toDto(CreateCertificateDto createGiftCertificateDto) {
         return new GiftCertificateDto(
                 null,
                 createGiftCertificateDto.getName(),

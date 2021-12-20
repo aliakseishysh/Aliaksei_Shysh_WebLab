@@ -7,6 +7,7 @@ import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
 import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
+import com.epam.esm.service.dto.tag.ReadTagByNameDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.impl.TagServiceImpl;
@@ -46,16 +47,14 @@ public class TagServiceImplTest {
     }
 
     @Test
-    public void readByTagDtoTest() throws EntityIsNotValidServiceException {
-        TagDto tagDto = new TagDto(null, "tag name 1");
-        Tag daoReadTag = new Tag(null, "tag name 1");
+    public void readByTagNameTest() {
         Tag daoReturnTag = new Tag(1L, "tag name 1");
         List<Tag> daoReturnTagList = new ArrayList<>();
         daoReturnTagList.add(daoReturnTag);
         List<TagDto> expected = new ArrayList<>();
         expected.add(new TagDto(1L, "tag name 1"));
-        doReturn(daoReturnTagList).when(tagDao).read(daoReadTag);
-        List<TagDto> actual = tagService.read(tagDto);
+        doReturn(daoReturnTagList).when(tagDao).read("tag name 1");
+        List<TagDto> actual = tagService.read(new ReadTagByNameDto("tag name 1"));
         assertEquals(expected, actual);
     }
 

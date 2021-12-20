@@ -11,7 +11,7 @@ public interface TagDao {
 
     List<Tag> read();
 
-    List<Tag> read(Tag tag);
+    List<Tag> read(String name);
 
     boolean delete(long id);
 

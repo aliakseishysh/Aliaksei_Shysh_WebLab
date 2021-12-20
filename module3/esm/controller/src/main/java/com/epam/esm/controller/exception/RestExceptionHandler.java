@@ -85,7 +85,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ResponseEntityException response = ResponseEntityException.builder()
                 .errorCode(status.value())
-                .errorMessage("Bad request")
+                .errorMessage(ex.getRootCause().getMessage())
                 .build();
         return ResponseEntity.status(response.getErrorCode())
                 .contentType(MediaType.APPLICATION_JSON)

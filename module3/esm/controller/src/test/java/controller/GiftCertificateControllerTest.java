@@ -5,11 +5,14 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftCertificateTagService;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.dto.TagDto;
-import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateTagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.junit.jupiter.api.Test;
@@ -40,8 +43,8 @@ public class GiftCertificateControllerTest {
     public void createCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
         List<CreateTagDto> tagsDto = new ArrayList<>();
         tagsDto.add(new CreateTagDto("tag name 1"));
-        CreateUpdateCertificateTagDto createUpdateCertificateTagDto = new CreateUpdateCertificateTagDto(
-                new CreateGiftCertificateDto(
+        CreateCertificateTagDto createUpdateCertificateTagDto = new CreateCertificateTagDto(
+                new CreateCertificateDto(
                         "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                         LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
                 ),
@@ -94,27 +97,23 @@ public class GiftCertificateControllerTest {
 
     @Test
     public void updateCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
-        GiftCertificateDto giftCertificateDto = new GiftCertificateDto(
-                null, "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+        UpdateCertificateDto giftCertificateDto = new UpdateCertificateDto(
+                "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
-        List<TagDto> tagsDto = new ArrayList<>();
-        tagsDto.add(new TagDto(1L, "tag name 1"));
-        CertificateTagDto certificateTagDto = new CertificateTagDto(giftCertificateDto, tagsDto);
-        Boolean expected = true;
-        doReturn(true).when(giftCertificateService).update(1L, certificateTagDto.getCertificate());
-        ResponseEntity<Boolean> responseEntity = giftCertificateController.updateCertificate(1L, certificateTagDto);
+        List<CreateTagDto> tagsDto = new ArrayList<>();
+        tagsDto.add(new CreateTagDto("tag name 1"));
+        UpdateCertificateTagDto certificateTagDto = new UpdateCertificateTagDto(1L, giftCertificateDto, tagsDto);
+        doReturn(true).when(giftCertificateTagService).update(certificateTagDto);
+        ResponseEntity<Boolean> responseEntity = giftCertificateController.updateCertificate(certificateTagDto);
         assertEquals(true, responseEntity.getBody());
     }
 
     @Test
     public void deleteCertificateTest() throws EntityIsNotValidServiceException, EntityIsNotValidControllerException {
-        GiftCertificateDto giCertificateTagDto = new GiftCertificateDto(
-                1L, null, null, null, null, null, null
-        );
-        Boolean expected = true;
-        doReturn(true).when(giftCertificateService).delete(giCertificateTagDto);
-        ResponseEntity<Boolean> responseEntity = giftCertificateController.deleteCertificate(giCertificateTagDto);
+        DeleteCertificateByIdDto deleteCertificateByIdDto = new DeleteCertificateByIdDto(1L);
+        doReturn(true).when(giftCertificateService).delete(deleteCertificateByIdDto);
+        ResponseEntity<Boolean> responseEntity = giftCertificateController.deleteCertificate(deleteCertificateByIdDto);
         assertEquals(true, responseEntity.getBody());
     }
 

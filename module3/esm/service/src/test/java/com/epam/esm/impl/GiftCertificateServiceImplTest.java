@@ -6,10 +6,12 @@ import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateDto;
+import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,7 +121,7 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     public void createTest() throws EntityIsNotValidServiceException {
-        CreateGiftCertificateDto createGiftCertificateDto = new CreateGiftCertificateDto(
+        CreateCertificateDto createGiftCertificateDto = new CreateCertificateDto(
                 "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
@@ -168,16 +170,20 @@ public class GiftCertificateServiceImplTest {
 
     @Test
     public void updateTest() throws EntityIsNotValidServiceException {
+        UpdateCertificateDto updateCertificateDto = new UpdateCertificateDto(
+                "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
+        );
         giftCertificateDto1.setId(null);
         when(certificateDao.update(eq(1L), any(GiftCertificate.class))).thenReturn(true);
-        boolean actual = giftCertificateService.update(1L, giftCertificateDto1);
+        boolean actual = giftCertificateService.update(1L, updateCertificateDto);
         assertTrue(actual);
     }
 
     @Test
-    public void deleteTest() throws EntityIsNotValidServiceException {
+    public void deleteTest() {
         when(certificateDao.delete(eq(1L))).thenReturn(true);
-        boolean actual = giftCertificateService.delete(new GiftCertificateDto(1L, null, null, null, null, null, null));
+        boolean actual = giftCertificateService.delete(new DeleteCertificateByIdDto(1L));
         assertTrue(actual);
     }
 

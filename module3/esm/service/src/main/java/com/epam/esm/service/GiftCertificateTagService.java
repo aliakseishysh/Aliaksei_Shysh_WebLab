@@ -1,14 +1,13 @@
 package com.epam.esm.service;
 
-import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
-import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 
 public interface GiftCertificateTagService {
 
-    long create(CreateUpdateCertificateTagDto createUpdateCertificateTagDto) throws EntityIsNotValidServiceException;
+    long create(CreateCertificateTagDto createCertificateTagDto) throws EntityIsNotValidServiceException;
 
-    boolean update(long id, CertificateTagDto certificateTagDto) throws EntityIsNotValidServiceException;
+    boolean update(UpdateCertificateTagDto updateCertificateTagDto) throws EntityIsNotValidServiceException;
 
 }

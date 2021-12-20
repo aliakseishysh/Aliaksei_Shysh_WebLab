@@ -4,10 +4,11 @@ import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.GiftCertificateTagService;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
-import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -37,14 +41,14 @@ public class GiftCertificateController {
     /**
      * Creates certificate in the com.epam.esm.database with specified parameters
      *
-     * @param certificateTagDto dto object for {@code CertificateTag} entity
+     * @param createCertificateTagDto dto object for {@code CertificateTag} entity
      * @return {@long} id of created object
      * @throws EntityIsNotValidControllerException if {@certificateTagDto} object is not valid
      */
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createCertificate(@RequestBody CreateUpdateCertificateTagDto createUpdateCertificateTagDto) throws EntityIsNotValidControllerException {
+    @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> createCertificate(@RequestBody @Valid CreateCertificateTagDto createCertificateTagDto) throws EntityIsNotValidControllerException {
         try {
-            Long result = giftCertificateTagService.create(createUpdateCertificateTagDto);
+            Long result = giftCertificateTagService.create(createCertificateTagDto);
             return ResponseEntity.ok(result);
         } catch (EntityIsNotValidServiceException exception) {
             throw new EntityIsNotValidControllerException(exception);
@@ -69,7 +73,7 @@ public class GiftCertificateController {
      * @return {@code ResponseEntity<List<GiftCertificateDto>>} with {@code GiftCertificateDto} objects
      */
     @PostMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CertificateTagDto>> findCertificatesWithSearchData(@RequestBody SearchDataDto searchDataDto) throws EntityIsNotValidControllerException {
+    public ResponseEntity<List<CertificateTagDto>> findCertificatesWithSearchData(@RequestBody @Valid SearchDataDto searchDataDto) throws EntityIsNotValidControllerException {
         try {
             List<CertificateTagDto> certificates = certificateService.read(searchDataDto);
             return ResponseEntity.ok(certificates);
@@ -82,15 +86,14 @@ public class GiftCertificateController {
     /**
      * Updates certificate in the com.epam.esm.database with specified parameters
      *
-     * @param id                id of certificate to update
-     * @param certificateTagDto certificate update info
+     * @param updateCertificateTagDto certificate update info
      * @return {@code ResponseEntity<Boolean>} result of the certificate update
      * @throws EntityIsNotValidControllerException if entity is not valid
      */
-    @PostMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> updateCertificate(@PathVariable long id, @RequestBody CertificateTagDto certificateTagDto) throws EntityIsNotValidControllerException {
+    @PostMapping(path = "/update/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> updateCertificate(@RequestBody @Valid UpdateCertificateTagDto updateCertificateTagDto) throws EntityIsNotValidControllerException {
         try {
-            Boolean result = certificateService.update(id, certificateTagDto.getCertificate());
+            Boolean result = giftCertificateTagService.update(updateCertificateTagDto);
             return ResponseEntity.ok(result);
         } catch (EntityIsNotValidServiceException exception) {
             throw new EntityIsNotValidControllerException(exception);
@@ -101,14 +104,14 @@ public class GiftCertificateController {
     /**
      * Deletes certificate with specified parameters (id)
      *
-     * @param giftCertificateDto dto object for {@code GiftCertificate} entity with {@id} of the certificate to delete
+     * @param deleteCertificateByIdDto dto object for {@code GiftCertificate} entity with {@id} of the certificate to delete
      * @return {@code ResponseEntity<Boolean>} result of the certificate update
      * @throws EntityIsNotValidControllerException if entity is not valid
      */
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteCertificate(@RequestBody GiftCertificateDto giftCertificateDto) throws EntityIsNotValidControllerException {
+    @DeleteMapping(path = "/delete")
+    public ResponseEntity<Boolean> deleteCertificate(@RequestBody @Valid DeleteCertificateByIdDto deleteCertificateByIdDto) throws EntityIsNotValidControllerException {
         try {
-            Boolean result = certificateService.delete(giftCertificateDto);
+            Boolean result = certificateService.delete(deleteCertificateByIdDto);
             return ResponseEntity.ok(result);
         } catch (EntityIsNotValidServiceException exception) {
             throw new EntityIsNotValidControllerException(exception);

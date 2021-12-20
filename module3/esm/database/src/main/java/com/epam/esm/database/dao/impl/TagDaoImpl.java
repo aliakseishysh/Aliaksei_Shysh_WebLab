@@ -19,7 +19,7 @@ public class TagDaoImpl implements TagDao {
 
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
-    private static final String READ_TAG = "SELECT id, name FROM tags WHERE id = ? OR name = ?";
+    private static final String READ_TAG_BY_NAME = "SELECT id, name FROM tags WHERE name = ?";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
     private static final String DELETE_TAG_BY_NAME = "DELETE FROM tags WHERE name = ?";
     private final JdbcTemplate jdbcTemplate;
@@ -50,8 +50,8 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public List<Tag> read(Tag tag) {
-        return jdbcTemplate.query(READ_TAG, new BeanPropertyRowMapper<>(Tag.class), tag.getId(), tag.getName());
+    public List<Tag> read(String name) {
+        return jdbcTemplate.query(READ_TAG_BY_NAME, new BeanPropertyRowMapper<>(Tag.class), name);
     }
 
     @Override

@@ -6,10 +6,12 @@ import com.epam.esm.database.entity.CertificateTag;
 import com.epam.esm.database.entity.GiftCertificate;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.CreateGiftCertificateDto;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import com.epam.esm.service.dto.TagDto;
-import com.epam.esm.service.dto.certificate.CreateUpdateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateDto;
+import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
+import com.epam.esm.service.dto.certificate.UpdateCertificateTagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,8 +91,8 @@ public class GiftCertificateTagServiceImplTest {
     public void createTest() throws EntityIsNotValidServiceException {
         List<CreateTagDto> tagsDto = new ArrayList<>();
         tagsDto.add(new CreateTagDto("tag name 1"));
-        CreateUpdateCertificateTagDto createUpdateCertificateTagDto = new CreateUpdateCertificateTagDto(
-                new CreateGiftCertificateDto(
+        CreateCertificateTagDto createUpdateCertificateTagDto = new CreateCertificateTagDto(
+                new CreateCertificateDto(
                         "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                         LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
                 ),
@@ -104,9 +106,18 @@ public class GiftCertificateTagServiceImplTest {
 
     @Test
     public void updateTest() throws EntityIsNotValidServiceException {
-        boolean expected = true;
+        List<CreateTagDto> tagsDto = new ArrayList<>();
+        tagsDto.add(new CreateTagDto("tag name 1"));
+        UpdateCertificateTagDto updateCertificateTagDto = new UpdateCertificateTagDto(
+                1L,
+                new UpdateCertificateDto(
+                        "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
+                        LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
+                ),
+                tagsDto
+        );
         when(giftCertificateService.update(eq(1L), any())).thenReturn(true);
-        boolean actual = giftCertificateTagService.update(1L, certificateTagDto);
+        boolean actual = giftCertificateTagService.update(updateCertificateTagDto);
         assertTrue(actual);
     }
 

@@ -62,13 +62,10 @@ public class TagDaoImplTest {
 
     @Test
     @Order(3)
-    public void readByIdOrNameTest() {
-        Tag searchWithIdOrName = new Tag(1L, "tag name 4");
-        List<Tag> actual = tagDao.read(searchWithIdOrName);
+    public void readByNameTest() {
+        List<Tag> actual = tagDao.read("tag name 4");
         List<Tag> expected = new ArrayList<>();
-        Tag tag1 = new Tag(1L, "tag name 1");
         Tag tag4 = new Tag(4L, "tag name 4");
-        expected.add(tag1);
         expected.add(tag4);
         Assertions.assertEquals(expected, actual);
     }

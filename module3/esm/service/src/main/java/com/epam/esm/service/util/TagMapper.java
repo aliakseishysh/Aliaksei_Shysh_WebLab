@@ -3,6 +3,7 @@ package com.epam.esm.service.util;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
+import com.epam.esm.service.dto.tag.ReadTagByNameDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +12,10 @@ public class TagMapper {
 
     public static Tag toObject(TagDto tagDto) {
         return new Tag(tagDto.getId(), tagDto.getName());
+    }
+
+    public static ReadTagByNameDto toDtoFromDto(CreateTagDto createTagDto) {
+        return new ReadTagByNameDto(createTagDto.getName());
     }
 
     public static TagDto toDto(Tag tag) {
