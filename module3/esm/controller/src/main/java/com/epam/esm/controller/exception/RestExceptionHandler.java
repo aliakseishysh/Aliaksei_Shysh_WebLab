@@ -36,6 +36,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler({WrongParametersControllerException.class})
+    public ResponseEntity<ResponseEntityException> onWrongParameters(WrongParametersControllerException exception) {
+        ResponseEntityException response = ResponseEntityException.builder()
+                .errorCode(WrongParametersControllerException.ERROR_CODE)
+                .errorMessage("Wrong request parameters")
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<ResponseEntityException> unhandledSql(SQLException exception) {
         ResponseEntityException response = ResponseEntityException.builder()
@@ -46,6 +57,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<Object> constraintsViolation(ConstraintViolationException exception) {
+        String message = null;
+        try {
+            message = new ObjectMapper().writeValueAsString(
+                    exception.getConstraintViolations()
+                        .stream()
+                        .map((e) -> e.getMessage())
+                        .collect(Collectors.toList()));
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(e.getMessage());
+        }
+        ResponseEntityException response = ResponseEntityException.builder()
+                .errorCode(CONSTRAINT_VIOLATION_ERROR_CODE)
+                .errorMessage(message)
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
