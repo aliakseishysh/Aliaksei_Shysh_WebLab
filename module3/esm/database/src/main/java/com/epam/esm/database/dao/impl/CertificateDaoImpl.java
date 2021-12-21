@@ -3,7 +3,7 @@ package com.epam.esm.database.dao.impl;
 import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.database.dao.extractor.CertificateTagExtractor;
 import com.epam.esm.database.entity.CertificateTag;
-import com.epam.esm.database.entity.GiftCertificate;
+import com.epam.esm.database.entity.Certificate;
 import com.epam.esm.database.entity.SearchData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -60,7 +60,7 @@ public class CertificateDaoImpl implements CertificateDao {
     }
 
     @Override
-    public long create(GiftCertificate certificate) {
+    public long create(Certificate certificate) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(CREATE_CERTIFICATE, new String[]{"id"});
@@ -76,8 +76,8 @@ public class CertificateDaoImpl implements CertificateDao {
     }
 
     @Override
-    public List<GiftCertificate> read() {
-        return jdbcTemplate.query(READ_CERTIFICATE, new BeanPropertyRowMapper<>(GiftCertificate.class));
+    public List<Certificate> read() {
+        return jdbcTemplate.query(READ_CERTIFICATE, new BeanPropertyRowMapper<>(Certificate.class));
     }
 
     @Override
@@ -131,17 +131,17 @@ public class CertificateDaoImpl implements CertificateDao {
 
 
     @Override
-    public boolean update(long id, GiftCertificate giftCertificate) {
+    public boolean update(long id, Certificate certificate) {
         return jdbcTemplate.update(connection -> {
             PreparedStatement statement = connection.prepareStatement(UPDATE_CERTIFICATE);
-            statement.setObject(1, giftCertificate.getId());
-            statement.setObject(2, giftCertificate.getName());
-            statement.setObject(3, giftCertificate.getDescription());
-            statement.setObject(4, giftCertificate.getPrice());
-            statement.setObject(5, giftCertificate.getDuration());
-            Timestamp createDate = giftCertificate.getCreateDate() != null ? Timestamp.valueOf(giftCertificate.getCreateDate()) : null;
+            statement.setObject(1, certificate.getId());
+            statement.setObject(2, certificate.getName());
+            statement.setObject(3, certificate.getDescription());
+            statement.setObject(4, certificate.getPrice());
+            statement.setObject(5, certificate.getDuration());
+            Timestamp createDate = certificate.getCreateDate() != null ? Timestamp.valueOf(certificate.getCreateDate()) : null;
             statement.setObject(6, createDate);
-            Timestamp lastUpdateDate = giftCertificate.getLastUpdateDate() != null ? Timestamp.valueOf(giftCertificate.getLastUpdateDate()) : null;
+            Timestamp lastUpdateDate = certificate.getLastUpdateDate() != null ? Timestamp.valueOf(certificate.getLastUpdateDate()) : null;
             statement.setObject(7, lastUpdateDate);
             statement.setLong(8, id);
             return statement;

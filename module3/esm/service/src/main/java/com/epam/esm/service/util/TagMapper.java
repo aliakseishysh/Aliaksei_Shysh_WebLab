@@ -1,7 +1,7 @@
 package com.epam.esm.service.util;
 
 import com.epam.esm.database.entity.Tag;
-import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.dto.tag.ReadTagByNameDto;
 

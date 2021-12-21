@@ -10,6 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CertificateTag {
-    private GiftCertificate certificate;
+    private Certificate certificate;
     private List<Tag> tags;
 }

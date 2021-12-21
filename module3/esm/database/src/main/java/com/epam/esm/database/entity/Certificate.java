@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCertificate {
+public class Certificate {
     private Long id;
     private String name;
     private String description;

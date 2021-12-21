@@ -1,13 +1,13 @@
-package com.epam.esm.impl;
+package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.impl.CertificateDaoImpl;
 import com.epam.esm.database.dao.impl.TagCertificateDaoImpl;
 import com.epam.esm.database.entity.CertificateTag;
-import com.epam.esm.database.entity.GiftCertificate;
+import com.epam.esm.database.entity.Certificate;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.GiftCertificateDto;
-import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.certificate.CertificateDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
@@ -20,8 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.epam.esm.service.impl.GiftCertificateServiceImpl;
-import com.epam.esm.service.impl.GiftCertificateTagServiceImpl;
+import com.epam.esm.service.impl.CertificateServiceImpl;
+import com.epam.esm.service.impl.CertificateTagServiceImpl;
 import com.epam.esm.service.impl.TagServiceImpl;
 
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GiftCertificateTagServiceImplTest {
+public class CertificateTagServiceImplTest {
 
     @Mock
     private CertificateDaoImpl certificateDao;
@@ -45,16 +45,16 @@ public class GiftCertificateTagServiceImplTest {
     @Mock
     private TagServiceImpl tagService;
     @Mock
-    private GiftCertificateServiceImpl giftCertificateService;
+    private CertificateServiceImpl giftCertificateService;
     @InjectMocks
-    private GiftCertificateTagServiceImpl giftCertificateTagService;
+    private CertificateTagServiceImpl giftCertificateTagService;
 
 
     private CertificateTagDto certificateTagDto;
 
     @BeforeEach
     public void init() {
-        GiftCertificateDto giftCertificateDto = new GiftCertificateDto(
+        CertificateDto certificateDto = new CertificateDto(
                 1L,
                 "certificate name 1",
                 "certificate description 1",
@@ -63,7 +63,7 @@ public class GiftCertificateTagServiceImplTest {
                 LocalDateTime.parse("2021-01-01T09:10:12.100"),
                 LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
-        GiftCertificate giftCertificate = new GiftCertificate(
+        Certificate certificate = new Certificate(
                 1L,
                 "certificate name 1",
                 "certificate description 1",
@@ -82,13 +82,13 @@ public class GiftCertificateTagServiceImplTest {
         Tag tag2 = new Tag(2L, "tag name 2");
         tagList.add(tag1);
         tagList.add(tag2);
-        certificateTagDto = new CertificateTagDto(giftCertificateDto, tagDtoList);
-        CertificateTag certificateTag = new CertificateTag(giftCertificate, tagList);
+        certificateTagDto = new CertificateTagDto(certificateDto, tagDtoList);
+        CertificateTag certificateTag = new CertificateTag(certificate, tagList);
     }
 
 
     @Test
-    public void createTest() throws EntityIsNotValidServiceException {
+    public void createTest() {
         List<CreateTagDto> tagsDto = new ArrayList<>();
         tagsDto.add(new CreateTagDto("tag name 1"));
         CreateCertificateTagDto createUpdateCertificateTagDto = new CreateCertificateTagDto(
@@ -105,7 +105,7 @@ public class GiftCertificateTagServiceImplTest {
     }
 
     @Test
-    public void updateTest() throws EntityIsNotValidServiceException {
+    public void updateTest() {
         List<CreateTagDto> tagsDto = new ArrayList<>();
         tagsDto.add(new CreateTagDto("tag name 1"));
         UpdateCertificateTagDto updateCertificateTagDto = new UpdateCertificateTagDto(

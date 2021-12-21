@@ -36,17 +36,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response);
     }
 
-    @ExceptionHandler({EntityIsNotValidControllerException.class})
-    public ResponseEntity<ResponseEntityException> onEntityInvalid(EntityIsNotValidControllerException exception) {
-        ResponseEntityException response = ResponseEntityException.builder()
-                .errorCode(EntityIsNotValidControllerException.ERROR_CODE)
-                .errorMessage(exception.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
-    }
-
     @ExceptionHandler({SQLException.class})
     public ResponseEntity<ResponseEntityException> unhandledSql(SQLException exception) {
         ResponseEntityException response = ResponseEntityException.builder()

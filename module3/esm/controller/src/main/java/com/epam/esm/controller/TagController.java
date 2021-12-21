@@ -1,20 +1,16 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.controller.exception.EntityAlreadyExistsControllerException;
-import com.epam.esm.controller.exception.EntityIsNotValidControllerException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
 import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
-import com.epam.esm.service.exception.EntityIsNotValidServiceException;
-import com.epam.esm.service.util.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,14 +39,13 @@ public class TagController {
      * @param createTagDto dto object for tag entity
      * @return {@long} id of created object
      * @throws EntityAlreadyExistsControllerException if entity already exists in the com.epam.esm.database
-     * @throws EntityIsNotValidControllerException    if {@tagDto} object is not valid
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto) throws EntityAlreadyExistsControllerException, EntityIsNotValidControllerException {
+    public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto) throws EntityAlreadyExistsControllerException {
         try {
             Long result = tagService.createTag(createTagDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch (EntityAlreadyExistsServiceException | EntityIsNotValidServiceException exception) {
+        } catch (EntityAlreadyExistsServiceException exception) {
             throw new EntityAlreadyExistsControllerException(exception);
         }
 
@@ -72,15 +67,10 @@ public class TagController {
      *
      * @param deleteTagByIdDto dto object for tag id
      * @return
-     * @throws EntityIsNotValidControllerException
      */
     @DeleteMapping(path = "/delete/id")
-    public ResponseEntity<Boolean> deleteTagById(@RequestBody @Valid DeleteTagByIdDto deleteTagByIdDto) throws EntityIsNotValidControllerException {
-        try {
-            return ResponseEntity.ok(tagService.deleteTag(deleteTagByIdDto));
-        } catch (EntityIsNotValidServiceException exception) {
-            throw new EntityIsNotValidControllerException(exception);
-        }
+    public ResponseEntity<Boolean> deleteTagById(@RequestBody @Valid DeleteTagByIdDto deleteTagByIdDto) {
+        return ResponseEntity.ok(tagService.deleteTag(deleteTagByIdDto));
     }
 
     /**
@@ -88,15 +78,10 @@ public class TagController {
      *
      * @param deleteTagByNameDto dto object for tag id
      * @return
-     * @throws EntityIsNotValidControllerException
      */
     @DeleteMapping(path = "/delete/name")
-    public ResponseEntity<Boolean> deleteTagByName(@RequestBody @Valid DeleteTagByNameDto deleteTagByNameDto) throws EntityIsNotValidControllerException {
-        try {
-            return ResponseEntity.ok(tagService.deleteTag(deleteTagByNameDto));
-        } catch (EntityIsNotValidServiceException exception) {
-            throw new EntityIsNotValidControllerException(exception);
-        }
+    public ResponseEntity<Boolean> deleteTagByName(@RequestBody @Valid DeleteTagByNameDto deleteTagByNameDto) {
+        return ResponseEntity.ok(tagService.deleteTag(deleteTagByNameDto));
     }
 
 }

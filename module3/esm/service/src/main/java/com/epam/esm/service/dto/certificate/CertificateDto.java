@@ -1,4 +1,4 @@
-package com.epam.esm.service.dto;
+package com.epam.esm.service.dto.certificate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCertificateDto {
+public class CertificateDto {
     private Long id;
     private String name;
     private String description;

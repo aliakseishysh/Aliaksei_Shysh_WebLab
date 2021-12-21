@@ -1,7 +1,7 @@
 package com.epam.esm.database.dao.extractor;
 
 import com.epam.esm.database.entity.CertificateTag;
-import com.epam.esm.database.entity.GiftCertificate;
+import com.epam.esm.database.entity.Certificate;
 import com.epam.esm.database.entity.Tag;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -24,8 +24,8 @@ public class CertificateTagExtractor implements ResultSetExtractor<List<Certific
             CertificateTag certificateTag = certificatesWithTags.get(rs.getLong(1));
             if (certificateTag == null) {
                 certificateTag = new CertificateTag();
-                GiftCertificate giftCertificate = extractGiftCertificate(rs);
-                certificateTag.setCertificate(giftCertificate);
+                Certificate certificate = extractGiftCertificate(rs);
+                certificateTag.setCertificate(certificate);
                 certificateTag.setTags(new ArrayList<>());
                 certificatesWithTags.put(rs.getLong(1), certificateTag);
                 results.add(certificateTag);
@@ -45,15 +45,15 @@ public class CertificateTagExtractor implements ResultSetExtractor<List<Certific
         return tag;
     }
 
-    private GiftCertificate extractGiftCertificate(ResultSet rs) throws SQLException {
-        GiftCertificate giftCertificate = new GiftCertificate();
-        giftCertificate.setId(rs.getLong(1));
-        giftCertificate.setName(rs.getString(2));
-        giftCertificate.setDescription(rs.getString(3));
-        giftCertificate.setPrice(rs.getBigDecimal(4));
-        giftCertificate.setDuration(rs.getInt(5));
-        giftCertificate.setCreateDate(rs.getObject(6, LocalDateTime.class));
-        giftCertificate.setLastUpdateDate(rs.getObject(7, LocalDateTime.class));
-        return giftCertificate;
+    private Certificate extractGiftCertificate(ResultSet rs) throws SQLException {
+        Certificate certificate = new Certificate();
+        certificate.setId(rs.getLong(1));
+        certificate.setName(rs.getString(2));
+        certificate.setDescription(rs.getString(3));
+        certificate.setPrice(rs.getBigDecimal(4));
+        certificate.setDuration(rs.getInt(5));
+        certificate.setCreateDate(rs.getObject(6, LocalDateTime.class));
+        certificate.setLastUpdateDate(rs.getObject(7, LocalDateTime.class));
+        return certificate;
     }
 }

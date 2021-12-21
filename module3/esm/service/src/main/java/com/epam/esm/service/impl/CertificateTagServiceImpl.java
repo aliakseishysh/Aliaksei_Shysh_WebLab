@@ -1,10 +1,10 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.TagCertificateDao;
-import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.GiftCertificateTagService;
+import com.epam.esm.service.CertificateService;
+import com.epam.esm.service.CertificateTagService;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateTagDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
@@ -23,37 +23,37 @@ import java.util.List;
 
 @Service
 @Transactional
-public class GiftCertificateTagServiceImpl implements GiftCertificateTagService {
+public class CertificateTagServiceImpl implements CertificateTagService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GiftCertificateTagServiceImpl.class);
-    private final GiftCertificateService giftCertificateService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CertificateTagServiceImpl.class);
+    private final CertificateService certificateService;
     private final TagService tagService;
     private final TagCertificateDao tagCertificateDao;
 
     @Autowired
-    public GiftCertificateTagServiceImpl(GiftCertificateService giftCertificateService, TagService tagService, TagCertificateDao tagCertificateDao) {
-        this.giftCertificateService = giftCertificateService;
+    public CertificateTagServiceImpl(CertificateService certificateService, TagService tagService, TagCertificateDao tagCertificateDao) {
+        this.certificateService = certificateService;
         this.tagService = tagService;
         this.tagCertificateDao = tagCertificateDao;
     }
 
     @Override
-    public long create(CreateCertificateTagDto certificateTagDto) throws EntityIsNotValidServiceException {
+    public long create(CreateCertificateTagDto certificateTagDto) {
         CreateCertificateDto certificate = certificateTagDto.getCreateGiftCertificateDto();
-        long createdCertificateId = giftCertificateService.create(certificate);
+        long createdCertificateId = certificateService.create(certificate);
         createTagsForCertificate(createdCertificateId, certificateTagDto.getCreateTagDtoList());
         return createdCertificateId;
     }
 
     @Override
-    public boolean update(UpdateCertificateTagDto updateCertificateTagDto) throws EntityIsNotValidServiceException {
+    public boolean update(UpdateCertificateTagDto updateCertificateTagDto) {
         UpdateCertificateDto certificate = updateCertificateTagDto.getUpdateCertificateDto();
-        boolean certificateUpdateResult = giftCertificateService.update(updateCertificateTagDto.getCertificateIdToUpdate(), certificate);
+        boolean certificateUpdateResult = certificateService.update(updateCertificateTagDto.getCertificateIdToUpdate(), certificate);
         createTagsForCertificate(updateCertificateTagDto.getCertificateIdToUpdate(), updateCertificateTagDto.getCreateTagDtoList());
         return certificateUpdateResult;
     }
 
-    private void createTagsForCertificate(long certificateId, List<CreateTagDto> tags) throws EntityIsNotValidServiceException {
+    private void createTagsForCertificate(long certificateId, List<CreateTagDto> tags) {
         if (tags != null) {
             for (CreateTagDto tag : tags) {
                 List<TagDto> tagList = tagService.read(TagMapper.toDtoFromDto(tag));

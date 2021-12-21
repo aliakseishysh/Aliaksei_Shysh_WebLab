@@ -1,9 +1,9 @@
-package entity;
+package com.epam.esm.database.dao.impl;
 
 import com.epam.esm.database.dao.CertificateDao;
 import com.epam.esm.database.dao.impl.CertificateDaoImpl;
 import com.epam.esm.database.entity.CertificateTag;
-import com.epam.esm.database.entity.GiftCertificate;
+import com.epam.esm.database.entity.Certificate;
 import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.database.entity.Tag;
 import org.junit.jupiter.api.AfterAll;
@@ -43,30 +43,30 @@ public class CertificateDaoImplTest {
     @Test
     @Order(1)
     public void createTest() {
-        GiftCertificate giftCertificate = new GiftCertificate(
+        Certificate certificate = new Certificate(
                 2L, "cert name 2", "cert desc 2", BigDecimal.valueOf(2), 2,
                 LocalDateTime.parse("2021-01-02T09:10:12.100"), LocalDateTime.parse("2021-06-02T09:10:12.100")
         );
         long expected = 2;
-        long actual = certificateDao.create(giftCertificate);
+        long actual = certificateDao.create(certificate);
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     @Order(2)
     public void readTest() {
-        List<GiftCertificate> expected = new ArrayList<>();
-        GiftCertificate giftCertificate1 = new GiftCertificate(
+        List<Certificate> expected = new ArrayList<>();
+        Certificate certificate1 = new Certificate(
                 1L, "cert name 1", "cert desc 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-05-02T09:10:12.100")
         );
-        GiftCertificate giftCertificate2 = new GiftCertificate(
+        Certificate certificate2 = new Certificate(
                 2L, "cert name 2", "cert desc 2", BigDecimal.valueOf(2), 2,
                 LocalDateTime.parse("2021-01-02T09:10:12.100"), LocalDateTime.parse("2021-06-02T09:10:12.100")
         );
-        expected.add(giftCertificate1);
-        expected.add(giftCertificate2);
-        List<GiftCertificate> actual = certificateDao.read();
+        expected.add(certificate1);
+        expected.add(certificate2);
+        List<Certificate> actual = certificateDao.read();
         Assertions.assertEquals(expected, actual);
     }
 
@@ -74,7 +74,7 @@ public class CertificateDaoImplTest {
     @Order(3)
     public void readWithEmptySearchData() {
         List<CertificateTag> expected = new ArrayList<>();
-        GiftCertificate giftCertificate1 = new GiftCertificate(
+        Certificate certificate1 = new Certificate(
                 1L, "cert name 1", "cert desc 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-05-02T09:10:12.100")
         );
@@ -83,12 +83,12 @@ public class CertificateDaoImplTest {
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag2);
-        GiftCertificate giftCertificate2 = new GiftCertificate(
+        Certificate certificate2 = new Certificate(
                 2L, "cert name 2", "cert desc 2", BigDecimal.valueOf(2), 2,
                 LocalDateTime.parse("2021-01-02T09:10:12.100"), LocalDateTime.parse("2021-06-02T09:10:12.100")
         );
-        expected.add(new CertificateTag(giftCertificate1, tags1));
-        expected.add(new CertificateTag(giftCertificate2, new ArrayList<>()));
+        expected.add(new CertificateTag(certificate1, tags1));
+        expected.add(new CertificateTag(certificate2, new ArrayList<>()));
         List<CertificateTag> actual = certificateDao.read(new SearchData());
         Assertions.assertEquals(expected, actual);
     }
@@ -97,7 +97,7 @@ public class CertificateDaoImplTest {
     @Order(4)
     public void readWithTagNameSearchData() {
         List<CertificateTag> expected = new ArrayList<>();
-        GiftCertificate giftCertificate1 = new GiftCertificate(
+        Certificate certificate1 = new Certificate(
                 1L, "cert name 1", "cert desc 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-05-02T09:10:12.100")
         );
@@ -106,7 +106,7 @@ public class CertificateDaoImplTest {
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag2);
-        expected.add(new CertificateTag(giftCertificate1, tags1));
+        expected.add(new CertificateTag(certificate1, tags1));
         List<CertificateTag> actual = certificateDao.read(new SearchData(
                 "tag name 1", null, null, null
         ));
@@ -117,7 +117,7 @@ public class CertificateDaoImplTest {
     @Order(5)
     public void readWithPartialCertificateNameSearchData() {
         List<CertificateTag> expected = new ArrayList<>();
-        GiftCertificate giftCertificate1 = new GiftCertificate(
+        Certificate certificate1 = new Certificate(
                 1L, "cert name 1", "cert desc 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-05-02T09:10:12.100")
         );
@@ -126,7 +126,7 @@ public class CertificateDaoImplTest {
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag2);
-        expected.add(new CertificateTag(giftCertificate1, tags1));
+        expected.add(new CertificateTag(certificate1, tags1));
         List<CertificateTag> actual = certificateDao.read(new SearchData(
                 null, "name 1", null, null
         ));
@@ -137,7 +137,7 @@ public class CertificateDaoImplTest {
     @Order(6)
     public void readWithPartialCertificateDescriptionSearchData() {
         List<CertificateTag> expected = new ArrayList<>();
-        GiftCertificate giftCertificate1 = new GiftCertificate(
+        Certificate certificate1 = new Certificate(
                 1L, "cert name 1", "cert desc 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-05-02T09:10:12.100")
         );
@@ -146,7 +146,7 @@ public class CertificateDaoImplTest {
         List<Tag> tags1 = new ArrayList<>();
         tags1.add(tag1);
         tags1.add(tag2);
-        expected.add(new CertificateTag(giftCertificate1, tags1));
+        expected.add(new CertificateTag(certificate1, tags1));
         List<CertificateTag> actual = certificateDao.read(new SearchData(
                 null, null, "desc 1", null
         ));
@@ -156,11 +156,11 @@ public class CertificateDaoImplTest {
     @Test
     @Order(7)
     public void updateTest() {
-        GiftCertificate giftCertificate = new GiftCertificate(
+        Certificate certificate = new Certificate(
                 null, "cert name 2 new", null, null, 5,
                 null, LocalDateTime.parse("2021-07-02T09:10:12.100")
         );
-        boolean actual = certificateDao.update(2L, giftCertificate);
+        boolean actual = certificateDao.update(2L, certificate);
         Assertions.assertTrue(actual);
     }
 

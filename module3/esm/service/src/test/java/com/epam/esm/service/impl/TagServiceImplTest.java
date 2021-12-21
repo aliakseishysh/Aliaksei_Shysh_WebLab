@@ -1,9 +1,9 @@
-package com.epam.esm.impl;
+package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.TagDao;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
-import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
 import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
@@ -59,7 +59,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    public void createTagTest() throws EntityAlreadyExistsServiceException, EntityIsNotValidServiceException, EntityAlreadyExistsDaoException {
+    public void createTagTest() throws EntityAlreadyExistsServiceException, EntityAlreadyExistsDaoException {
         Long expected = 1L;
         when(tagDao.create(any())).thenReturn(expected);
         long actual = tagService.createTag(new CreateTagDto("tag name 1"));

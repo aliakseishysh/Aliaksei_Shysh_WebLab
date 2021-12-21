@@ -1,19 +1,19 @@
-package com.epam.esm.impl;
+package com.epam.esm.service.impl;
 
 import com.epam.esm.database.dao.impl.CertificateDaoImpl;
 import com.epam.esm.database.entity.CertificateTag;
-import com.epam.esm.database.entity.GiftCertificate;
+import com.epam.esm.database.entity.Certificate;
 import com.epam.esm.database.entity.SearchData;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.service.dto.CertificateTagDto;
-import com.epam.esm.service.dto.GiftCertificateDto;
+import com.epam.esm.service.dto.certificate.CertificateDto;
 import com.epam.esm.service.dto.SearchDataDto;
-import com.epam.esm.service.dto.TagDto;
+import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 import com.epam.esm.service.exception.EntityIsNotValidServiceException;
-import com.epam.esm.service.impl.GiftCertificateServiceImpl;
+import com.epam.esm.service.impl.CertificateServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,25 +33,25 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GiftCertificateServiceImplTest {
+public class CertificateServiceImplTest {
     @Mock
     private CertificateDaoImpl certificateDao;
     @InjectMocks
-    private GiftCertificateServiceImpl giftCertificateService;
+    private CertificateServiceImpl giftCertificateService;
 
     private CertificateTagDto certificateTagDto1;
     private CertificateTagDto certificateTagDto2;
     private CertificateTag certificateTag1;
     private CertificateTag certificateTag2;
-    private GiftCertificateDto giftCertificateDto1;
-    private GiftCertificate giftCertificate1;
-    private GiftCertificateDto giftCertificateDto2;
-    private GiftCertificate giftCertificate2;
+    private CertificateDto certificateDto1;
+    private Certificate certificate1;
+    private CertificateDto certificateDto2;
+    private Certificate certificate2;
     private SearchDataDto searchDataDto;
 
     @BeforeEach
     public void init() {
-        giftCertificateDto1 = new GiftCertificateDto(
+        certificateDto1 = new CertificateDto(
                 1L,
                 "certificate name 1",
                 "certificate description 1",
@@ -60,7 +60,7 @@ public class GiftCertificateServiceImplTest {
                 LocalDateTime.parse("2021-01-01T09:10:12.100"),
                 LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
-        giftCertificate1 = new GiftCertificate(
+        certificate1 = new Certificate(
                 1L,
                 "certificate name 1",
                 "certificate description 1",
@@ -69,7 +69,7 @@ public class GiftCertificateServiceImplTest {
                 LocalDateTime.parse("2021-01-01T09:10:12.100"),
                 LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
-        giftCertificateDto2 = new GiftCertificateDto(
+        certificateDto2 = new CertificateDto(
                 2L,
                 "certificate name 2",
                 "certificate description 2",
@@ -78,7 +78,7 @@ public class GiftCertificateServiceImplTest {
                 LocalDateTime.parse("2021-01-01T09:10:12.200"),
                 LocalDateTime.parse("2021-01-01T09:10:12.300")
         );
-        giftCertificate2 = new GiftCertificate(
+        certificate2 = new Certificate(
                 2L,
                 "certificate name 2",
                 "certificate description 2",
@@ -93,15 +93,15 @@ public class GiftCertificateServiceImplTest {
         Tag tag1 = new Tag(1L, "tag name 1");
         Tag tag2 = new Tag(2L, "tag name 2");
         Tag tag3 = new Tag(3L, "tag name 3");
-        certificateTagDto1 = new CertificateTagDto(giftCertificateDto1, new ArrayList<>());
+        certificateTagDto1 = new CertificateTagDto(certificateDto1, new ArrayList<>());
         certificateTagDto1.getTags().add(tagDto1);
         certificateTagDto1.getTags().add(tagDto3);
-        certificateTagDto2 = new CertificateTagDto(giftCertificateDto2, new ArrayList<>());
+        certificateTagDto2 = new CertificateTagDto(certificateDto2, new ArrayList<>());
         certificateTagDto2.getTags().add(tagDto2);
-        certificateTag1 = new CertificateTag(giftCertificate1, new ArrayList<>());
+        certificateTag1 = new CertificateTag(certificate1, new ArrayList<>());
         certificateTag1.getTags().add(tag1);
         certificateTag1.getTags().add(tag3);
-        certificateTag2 = new CertificateTag(giftCertificate2, new ArrayList<>());
+        certificateTag2 = new CertificateTag(certificate2, new ArrayList<>());
         certificateTag2.getTags().add(tag2);
         searchDataDto = new SearchDataDto(
                 "tag name 1",
@@ -120,32 +120,32 @@ public class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void createTest() throws EntityIsNotValidServiceException {
+    public void createTest() {
         CreateCertificateDto createGiftCertificateDto = new CreateCertificateDto(
                 "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
         Long expected = 1L;
-        when(certificateDao.create(any(GiftCertificate.class))).thenReturn(expected);
+        when(certificateDao.create(any(Certificate.class))).thenReturn(expected);
         Long actual = giftCertificateService.create(createGiftCertificateDto);
         assertEquals(expected, actual);
     }
 
     @Test
     public void readTest() {
-        List<GiftCertificateDto> expected = new ArrayList<>();
-        expected.add(giftCertificateDto1);
-        expected.add(giftCertificateDto2);
-        List<GiftCertificate> returnFromDao = new ArrayList<>();
-        returnFromDao.add(giftCertificate1);
-        returnFromDao.add(giftCertificate2);
+        List<CertificateDto> expected = new ArrayList<>();
+        expected.add(certificateDto1);
+        expected.add(certificateDto2);
+        List<Certificate> returnFromDao = new ArrayList<>();
+        returnFromDao.add(certificate1);
+        returnFromDao.add(certificate2);
         when((certificateDao.read())).thenReturn(returnFromDao);
-        List<GiftCertificateDto> actual = giftCertificateService.read();
+        List<CertificateDto> actual = giftCertificateService.read();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void readByEmptySearchDataTest() throws EntityIsNotValidServiceException {
+    public void readByEmptySearchDataTest() {
         List<CertificateTagDto> expected = new ArrayList<>();
         expected.add(certificateTagDto1);
         expected.add(certificateTagDto2);
@@ -158,7 +158,7 @@ public class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void readBySearchDataTest() throws EntityIsNotValidServiceException {
+    public void readBySearchDataTest() {
         List<CertificateTagDto> expected = new ArrayList<>();
         expected.add(certificateTagDto1);
         List<CertificateTag> returnFromDao = new ArrayList<>();
@@ -169,13 +169,13 @@ public class GiftCertificateServiceImplTest {
     }
 
     @Test
-    public void updateTest() throws EntityIsNotValidServiceException {
+    public void updateTest() {
         UpdateCertificateDto updateCertificateDto = new UpdateCertificateDto(
                 "certificate name 1", "certificate description 1", BigDecimal.valueOf(1), 1,
                 LocalDateTime.parse("2021-01-01T09:10:12.100"), LocalDateTime.parse("2021-01-01T09:10:12.200")
         );
-        giftCertificateDto1.setId(null);
-        when(certificateDao.update(eq(1L), any(GiftCertificate.class))).thenReturn(true);
+        certificateDto1.setId(null);
+        when(certificateDao.update(eq(1L), any(Certificate.class))).thenReturn(true);
         boolean actual = giftCertificateService.update(1L, updateCertificateDto);
         assertTrue(actual);
     }

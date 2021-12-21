@@ -1,4 +1,4 @@
-package entity;
+package com.epam.esm.database.dao.impl;
 
 import com.epam.esm.database.dao.TagCertificateDao;
 import com.epam.esm.database.dao.impl.TagCertificateDaoImpl;

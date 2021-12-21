@@ -6,31 +6,31 @@ import com.epam.esm.service.dto.CertificateTagDto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CertificateTagDtoMapper {
+public class CertificateTagMapper {
 
     public static CertificateTag toObject(CertificateTagDto certificateTagDto) {
         return new CertificateTag(
-                GiftCertificateMapper.toObject(certificateTagDto.getCertificate()),
+                CertificateMapper.toObject(certificateTagDto.getCertificate()),
                 TagMapper.toObject(certificateTagDto.getTags())
         );
     }
 
     public static List<CertificateTag> toObject(List<CertificateTagDto> certificateTagDtoList) {
         return certificateTagDtoList.stream()
-                .map((CertificateTagDtoMapper::toObject))
+                .map((CertificateTagMapper::toObject))
                 .collect(Collectors.toList());
     }
 
     public static CertificateTagDto toDto(CertificateTag certificateTag) {
         return new CertificateTagDto(
-                GiftCertificateMapper.toDto(certificateTag.getCertificate()),
+                CertificateMapper.toDto(certificateTag.getCertificate()),
                 TagMapper.toDto(certificateTag.getTags())
         );
     }
 
     public static List<CertificateTagDto> toDto(List<CertificateTag> certificateTagList) {
         return certificateTagList.stream()
-                .map((CertificateTagDtoMapper::toDto))
+                .map((CertificateTagMapper::toDto))
                 .collect(Collectors.toList());
     }
 

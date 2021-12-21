@@ -1,17 +1,17 @@
 package com.epam.esm.service.util;
 
-import com.epam.esm.database.entity.GiftCertificate;
-import com.epam.esm.service.dto.GiftCertificateDto;
+import com.epam.esm.database.entity.Certificate;
+import com.epam.esm.service.dto.certificate.CertificateDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GiftCertificateMapper {
+public class CertificateMapper {
 
-    public static GiftCertificate toObject(GiftCertificateDto certificateDto) {
-        return new GiftCertificate(
+    public static Certificate toObject(CertificateDto certificateDto) {
+        return new Certificate(
                 certificateDto.getId(),
                 certificateDto.getName(),
                 certificateDto.getDescription(),
@@ -22,8 +22,8 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificate toObject(CreateCertificateDto createGiftCertificateDto) {
-        return new GiftCertificate(
+    public static Certificate toObject(CreateCertificateDto createGiftCertificateDto) {
+        return new Certificate(
                 null,
                 createGiftCertificateDto.getName(),
                 createGiftCertificateDto.getDescription(),
@@ -34,8 +34,8 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificate toObject(UpdateCertificateDto updateCertificateDto) {
-        return new GiftCertificate(
+    public static Certificate toObject(UpdateCertificateDto updateCertificateDto) {
+        return new Certificate(
                 null,
                 updateCertificateDto.getName(),
                 updateCertificateDto.getDescription(),
@@ -46,8 +46,8 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificateDto toDto(GiftCertificate certificate) {
-        return new GiftCertificateDto(
+    public static CertificateDto toDto(Certificate certificate) {
+        return new CertificateDto(
                 certificate.getId(),
                 certificate.getName(),
                 certificate.getDescription(),
@@ -58,8 +58,8 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static GiftCertificateDto toDto(CreateCertificateDto createGiftCertificateDto) {
-        return new GiftCertificateDto(
+    public static CertificateDto toDto(CreateCertificateDto createGiftCertificateDto) {
+        return new CertificateDto(
                 null,
                 createGiftCertificateDto.getName(),
                 createGiftCertificateDto.getDescription(),
@@ -70,12 +70,12 @@ public class GiftCertificateMapper {
         );
     }
 
-    public static List<GiftCertificateDto> toDto(List<GiftCertificate> certificates) {
-        return certificates.stream().map((GiftCertificateMapper::toDto)).collect(Collectors.toList());
+    public static List<CertificateDto> toDto(List<Certificate> certificates) {
+        return certificates.stream().map((CertificateMapper::toDto)).collect(Collectors.toList());
     }
 
-    public static List<GiftCertificate> toObject(List<GiftCertificateDto> certificatesDto) {
-        return certificatesDto.stream().map((GiftCertificateMapper::toObject)).collect(Collectors.toList());
+    public static List<Certificate> toObject(List<CertificateDto> certificatesDto) {
+        return certificatesDto.stream().map((CertificateMapper::toObject)).collect(Collectors.toList());
     }
 
 
