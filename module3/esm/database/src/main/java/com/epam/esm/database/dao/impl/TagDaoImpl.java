@@ -1,7 +1,9 @@
 package com.epam.esm.database.dao.impl;
 
 import com.epam.esm.database.dao.TagDao;
+import com.epam.esm.database.dao.extractor.TagCostExtractor;
 import com.epam.esm.database.entity.Tag;
+import com.epam.esm.database.entity.TagCost;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,6 +22,26 @@ public class TagDaoImpl implements TagDao {
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
     private static final String READ_TAG_BY_NAME = "SELECT id, name FROM tags WHERE name = ?";
+    private static final String READ_MOST_WIDELY_USED_WITH_OVERALL_COST = "WITH cte_data AS (" +
+            "  SELECT" +
+            "    tags.id," +
+            "    tags.name," +
+            "    SUM(orders.price) OVER(PARTITION BY tags.id, tags.name) AS cost," +
+            "    COUNT(*) OVER(PARTITION BY tags.id, tags.name) AS count" +
+            "  FROM orders" +
+            "  INNER JOIN users ON orders.user_id = users.id" +
+            "  INNER JOIN tags_gift_certificates ON orders.certificate_id = tags_gift_certificates.certificate_id" +
+            "  INNER JOIN tags ON tags_gift_certificates.tag_id = tags.id" +
+            "  WHERE users.username = ?" +
+            "), cte_max_count AS (" +
+            "  SELECT MAX(cte_data.count) AS max_count FROM cte_data" +
+            ")" +
+            "  SELECT DISTINCT" +
+            "    cte_data.id," +
+            "    cte_data.name," +
+            "    cte_data.cost" +
+            "  FROM cte_data CROSS JOIN cte_max_count" +
+            "  WHERE cte_data.count = cte_max_count.max_count";
     private static final String DELETE_TAG = "DELETE FROM tags WHERE id = ?";
     private static final String DELETE_TAG_BY_NAME = "DELETE FROM tags WHERE name = ?";
     private final JdbcTemplate jdbcTemplate;
@@ -62,5 +84,10 @@ public class TagDaoImpl implements TagDao {
     @Override
     public boolean delete(String name) {
         return jdbcTemplate.update(DELETE_TAG_BY_NAME, name) == 1;
+    }
+
+    @Override
+    public List<TagCost> readMostWidelyUsed(String username) {
+        return jdbcTemplate.query(READ_MOST_WIDELY_USED_WITH_OVERALL_COST, new TagCostExtractor(), username);
     }
 }

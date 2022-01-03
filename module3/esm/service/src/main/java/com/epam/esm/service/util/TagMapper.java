@@ -1,6 +1,8 @@
 package com.epam.esm.service.util;
 
 import com.epam.esm.database.entity.Tag;
+import com.epam.esm.database.entity.TagCost;
+import com.epam.esm.service.dto.tag.TagCostDto;
 import com.epam.esm.service.dto.tag.TagDto;
 import com.epam.esm.service.dto.tag.CreateTagDto;
 import com.epam.esm.service.dto.tag.ReadTagByNameDto;
@@ -22,6 +24,10 @@ public class TagMapper {
         return new TagDto(tag.getId(), tag.getName());
     }
 
+    public static TagCostDto toDto(TagCost tagCost) {
+        return new TagCostDto(TagMapper.toDto(tagCost.getTag()), tagCost.getCost());
+    }
+
     public static TagDto toDto(CreateTagDto createTagDto) {
         return new TagDto(null, createTagDto.getName());
     }
@@ -31,6 +37,10 @@ public class TagMapper {
     }
 
     public static List<TagDto> toDto(List<Tag> tags) {
+        return tags.stream().map((TagMapper::toDto)).collect(Collectors.toList());
+    }
+
+    public static List<TagCostDto> toDtoTagCost(List<TagCost> tags) {
         return tags.stream().map((TagMapper::toDto)).collect(Collectors.toList());
     }
 

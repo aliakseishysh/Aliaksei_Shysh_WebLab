@@ -3,11 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.database.dao.TagDao;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.tag.TagDto;
-import com.epam.esm.service.dto.tag.CreateTagDto;
-import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
-import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
-import com.epam.esm.service.dto.tag.ReadTagByNameDto;
+import com.epam.esm.service.dto.tag.*;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.util.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +29,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagDto> read(ReadTagByNameDto readTagByNameDto) {
         return TagMapper.toDto(tagDao.read(readTagByNameDto.getName()));
+    }
+
+    @Override
+    public List<TagCostDto> read(ReadMostWidelyUsedTagDto readMostWidelyUsedTagDto) {
+        return TagMapper.toDtoTagCost(tagDao.readMostWidelyUsed(readMostWidelyUsedTagDto.getUsername()));
     }
 
     @Override

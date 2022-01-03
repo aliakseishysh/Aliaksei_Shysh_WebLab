@@ -2,10 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.controller.exception.EntityAlreadyExistsControllerException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.dto.tag.CreateTagDto;
-import com.epam.esm.service.dto.tag.DeleteTagByIdDto;
-import com.epam.esm.service.dto.tag.DeleteTagByNameDto;
-import com.epam.esm.service.dto.tag.TagDto;
+import com.epam.esm.service.dto.tag.*;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,6 +56,12 @@ public class TagController {
     @GetMapping
     public ResponseEntity<List<TagDto>> findTags() {
         List<TagDto> tags = tagService.read();
+        return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/search/most/used")
+    public ResponseEntity<List<TagCostDto>> readMostWidelyUsedTag(@RequestBody @Valid ReadMostWidelyUsedTagDto readMostWidelyUsedTagDto) {
+        List<TagCostDto> tags = tagService.read(readMostWidelyUsedTagDto);
         return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
     }
 

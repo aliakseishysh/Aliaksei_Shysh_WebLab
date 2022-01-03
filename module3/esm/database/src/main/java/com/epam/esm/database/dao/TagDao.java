@@ -1,6 +1,7 @@
 package com.epam.esm.database.dao;
 
 import com.epam.esm.database.entity.Tag;
+import com.epam.esm.database.entity.TagCost;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface TagDao {
     boolean delete(long id);
 
     boolean delete(String name);
+
+    List<TagCost> readMostWidelyUsed(String username);
 }
