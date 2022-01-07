@@ -13,8 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchDataDto {
-    @Size(min = 1, max = 254, message = "Field tagName should be between 1 and 254 characters")
-    private String tagName;
+
+    @Size(min = 1, max = 10, message = "List of tags should be between 1 and 10 elements")
+    private List<@Size(min = 1, max = 254, message = "Field tagName should be between 1 and 254 characters") String> tagNames;
     @Size(min = 1, max = 254, message = "Field partialCertificateName should be between 1 and 254 characters")
     private String partialCertificateName;
     @Size(min = 1, max = 254, message = "Field partialCertificateDescription should be between 1 and 254 characters")

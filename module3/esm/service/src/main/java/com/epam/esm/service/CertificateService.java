@@ -6,20 +6,19 @@ import com.epam.esm.service.dto.SearchDataDto;
 import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.DeleteCertificateByIdDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
-import com.epam.esm.service.exception.EntityIsNotValidServiceException;
 
 import java.util.List;
 
 public interface CertificateService {
 
-    long create(CreateCertificateDto createGiftCertificateDto);
+    long save(CreateCertificateDto createGiftCertificateDto);
 
-    List<CertificateDto> read();
+    List<CertificateDto> findAll();
 
-    List<CertificateTagDto> read(SearchDataDto searchData);
+    List<CertificateDto> read(SearchDataDto searchData);
 
-    boolean update(long id, UpdateCertificateDto certificate);
+    CertificateDto update(UpdateCertificateDto certificate);
 
-    boolean delete(DeleteCertificateByIdDto deleteCertificateByIdDto);
+    void delete(DeleteCertificateByIdDto deleteCertificateByIdDto);
 
 }

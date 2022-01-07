@@ -2,10 +2,7 @@ package com.epam.esm.service.util;
 
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.database.entity.TagCost;
-import com.epam.esm.service.dto.tag.TagCostDto;
-import com.epam.esm.service.dto.tag.TagDto;
-import com.epam.esm.service.dto.tag.CreateTagDto;
-import com.epam.esm.service.dto.tag.ReadTagByNameDto;
+import com.epam.esm.service.dto.tag.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +21,22 @@ public class TagMapper {
         return new TagDto(tag.getId(), tag.getName());
     }
 
+    public static TagDto createTagDtoToTagDto(CreateTagDto createTagDto) {
+        return new TagDto(null, createTagDto.getName());
+    }
+
+    public static List<TagDto> createTagDtoListToTagDtoList(List<CreateTagDto> tags) {
+        return tags.stream().map((TagMapper::createTagDtoToTagDto)).collect(Collectors.toList());
+    }
+
+    public static List<TagDto> updateTagDtoListToTagDtoList(List<UpdateTagDto> tags) {
+        return tags.stream().map((TagMapper::updateTagDtoToTagDto)).collect(Collectors.toList());
+    }
+
+    public static TagDto updateTagDtoToTagDto(UpdateTagDto updateTagDto) {
+        return new TagDto(null, updateTagDto.getName());
+    }
+
     public static TagCostDto toDto(TagCost tagCost) {
         return new TagCostDto(TagMapper.toDto(tagCost.getTag()), tagCost.getCost());
     }
@@ -36,8 +49,16 @@ public class TagMapper {
         return new Tag(null, createTagDto.getName());
     }
 
+    public static Tag toObject(UpdateTagDto updateTagDto) {
+        return new Tag(null, updateTagDto.getName());
+    }
+
     public static List<TagDto> toDto(List<Tag> tags) {
         return tags.stream().map((TagMapper::toDto)).collect(Collectors.toList());
+    }
+
+    public static List<Tag> toObjectCreateTagList(List<CreateTagDto> createTagDtoList) {
+        return createTagDtoList.stream().map((TagMapper::toObject)).collect(Collectors.toList());
     }
 
     public static List<TagCostDto> toDtoTagCost(List<TagCost> tags) {
@@ -49,4 +70,11 @@ public class TagMapper {
     }
 
 
+    public static List<Tag> toObjectUpdateTagList(List<UpdateTagDto> updateTagDtoList) {
+        return updateTagDtoList.stream().map((TagMapper::toObject)).collect(Collectors.toList());
+    }
+
+    public static List<TagDto> createTagDtoToTagDto(List<CreateTagDto> createTagDtoList) {
+        return createTagDtoList.stream().map((TagMapper::toDto)).collect(Collectors.toList());
+    }
 }

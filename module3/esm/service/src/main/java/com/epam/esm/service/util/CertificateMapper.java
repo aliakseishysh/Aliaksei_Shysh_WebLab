@@ -6,6 +6,7 @@ import com.epam.esm.service.dto.certificate.CreateCertificateDto;
 import com.epam.esm.service.dto.certificate.UpdateCertificateDto;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CertificateMapper {
@@ -18,7 +19,8 @@ public class CertificateMapper {
                 certificateDto.getPrice(),
                 certificateDto.getDuration(),
                 certificateDto.getCreateDate(),
-                certificateDto.getLastUpdateDate()
+                certificateDto.getLastUpdateDate(),
+                TagMapper.toObject(certificateDto.getTags())
         );
     }
 
@@ -30,7 +32,8 @@ public class CertificateMapper {
                 createGiftCertificateDto.getPrice(),
                 createGiftCertificateDto.getDuration(),
                 createGiftCertificateDto.getCreateDate(),
-                createGiftCertificateDto.getLastUpdateDate()
+                createGiftCertificateDto.getLastUpdateDate(),
+                TagMapper.toObjectCreateTagList(createGiftCertificateDto.getCreateTagDtoList())
         );
     }
 
@@ -42,7 +45,8 @@ public class CertificateMapper {
                 updateCertificateDto.getPrice(),
                 updateCertificateDto.getDuration(),
                 updateCertificateDto.getCreateDate(),
-                updateCertificateDto.getLastUpdateDate()
+                updateCertificateDto.getLastUpdateDate(),
+                TagMapper.toObjectUpdateTagList(updateCertificateDto.getUpdateTagDtoList())
         );
     }
 
@@ -54,11 +58,12 @@ public class CertificateMapper {
                 certificate.getPrice(),
                 certificate.getDuration(),
                 certificate.getCreateDate(),
-                certificate.getLastUpdateDate()
+                certificate.getLastUpdateDate(),
+                TagMapper.toDto(certificate.getTags())
         );
     }
 
-    public static CertificateDto toDto(CreateCertificateDto createGiftCertificateDto) {
+    public static CertificateDto createCertificateDtoToCertificateDto(CreateCertificateDto createGiftCertificateDto) {
         return new CertificateDto(
                 null,
                 createGiftCertificateDto.getName(),
@@ -66,7 +71,21 @@ public class CertificateMapper {
                 createGiftCertificateDto.getPrice(),
                 createGiftCertificateDto.getDuration(),
                 createGiftCertificateDto.getCreateDate(),
-                createGiftCertificateDto.getLastUpdateDate()
+                createGiftCertificateDto.getLastUpdateDate(),
+                TagMapper.createTagDtoToTagDto(createGiftCertificateDto.getCreateTagDtoList())
+        );
+    }
+
+    public static CertificateDto updateCertificateDtoToCertificateDto(UpdateCertificateDto updateGiftCertificateDto) {
+        return new CertificateDto(
+                null,
+                updateGiftCertificateDto.getName(),
+                updateGiftCertificateDto.getDescription(),
+                updateGiftCertificateDto.getPrice(),
+                updateGiftCertificateDto.getDuration(),
+                updateGiftCertificateDto.getCreateDate(),
+                updateGiftCertificateDto.getLastUpdateDate(),
+                TagMapper.updateTagDtoListToTagDtoList(updateGiftCertificateDto.getUpdateTagDtoList())
         );
     }
 

@@ -7,6 +7,7 @@ import com.epam.esm.database.entity.TagCost;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,7 +18,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class TagDaoImpl implements TagDao {
+public class TagDaoImpl  {
 
     private static final String CREATE_TAG = "INSERT INTO tags(name) VALUES (?)";
     private static final String READ_TAGS = "SELECT id, name FROM tags";
@@ -51,43 +52,43 @@ public class TagDaoImpl implements TagDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public long create(Tag tag) throws EntityAlreadyExistsDaoException {
-        try {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[]{"id"});
-                statement.setString(1, tag.getName());
-                return statement;
-            }, keyHolder);
-            return keyHolder.getKey().longValue();
-        } catch (DuplicateKeyException e) {
-            throw new EntityAlreadyExistsDaoException("Entity Tag with name=" + tag.getName() + " already exists.");
-        }
-    }
-
-    @Override
-    public List<Tag> read() {
-        return jdbcTemplate.query(READ_TAGS, new BeanPropertyRowMapper<>(Tag.class));
-    }
-
-    @Override
-    public List<Tag> read(String name) {
-        return jdbcTemplate.query(READ_TAG_BY_NAME, new BeanPropertyRowMapper<>(Tag.class), name);
-    }
-
-    @Override
-    public boolean delete(long id) {
-        return jdbcTemplate.update(DELETE_TAG, id) == 1;
-    }
-
-    @Override
-    public boolean delete(String name) {
-        return jdbcTemplate.update(DELETE_TAG_BY_NAME, name) == 1;
-    }
-
-    @Override
-    public List<TagCost> readMostWidelyUsed(String username) {
-        return jdbcTemplate.query(READ_MOST_WIDELY_USED_WITH_OVERALL_COST, new TagCostExtractor(), username);
-    }
+//    @Override
+//    public long create(Tag tag) throws EntityAlreadyExistsDaoException {
+//        try {
+//            KeyHolder keyHolder = new GeneratedKeyHolder();
+//            jdbcTemplate.update(connection -> {
+//                PreparedStatement statement = connection.prepareStatement(CREATE_TAG, new String[]{"id"});
+//                statement.setString(1, tag.getName());
+//                return statement;
+//            }, keyHolder);
+//            return keyHolder.getKey().longValue();
+//        } catch (DuplicateKeyException e) {
+//            throw new EntityAlreadyExistsDaoException("Entity Tag with name=" + tag.getName() + " already exists.");
+//        }
+//    }
+//
+//    @Override
+//    public List<Tag> read() {
+//        return jdbcTemplate.query(READ_TAGS, new BeanPropertyRowMapper<>(Tag.class));
+//    }
+//
+//    @Override
+//    public List<Tag> read(String name) {
+//        return jdbcTemplate.query(READ_TAG_BY_NAME, new BeanPropertyRowMapper<>(Tag.class), name);
+//    }
+//
+//    @Override
+//    public boolean delete(long id) {
+//        return jdbcTemplate.update(DELETE_TAG, id) == 1;
+//    }
+//
+//    @Override
+//    public boolean delete(String name) {
+//        return jdbcTemplate.update(DELETE_TAG_BY_NAME, name) == 1;
+//    }
+//
+//    @Override
+//    public List<TagCost> readMostWidelyUsed(String username) {
+//        return jdbcTemplate.query(READ_MOST_WIDELY_USED_WITH_OVERALL_COST, new TagCostExtractor(), username);
+//    }
 }

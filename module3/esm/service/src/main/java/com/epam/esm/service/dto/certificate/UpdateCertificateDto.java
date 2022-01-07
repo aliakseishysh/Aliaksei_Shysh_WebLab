@@ -1,22 +1,26 @@
 package com.epam.esm.service.dto.certificate;
 
+import com.epam.esm.service.dto.tag.CreateTagDto;
+import com.epam.esm.service.dto.tag.UpdateTagDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCertificateDto {
+    @NotNull(message = "Field certificateIdToUpdate should not be empty")
+    @Min(value = 1, message = "Field certificateIdToUpdate should be greater than 1")
+    private Long certificateIdToUpdate;
     @Size(min = 1, max = 254, message = "Field name should be between 1 and 254 characters")
     private String name;
     @Size(min = 1, max = 254, message = "Field description should be between 1 and 254 characters")
@@ -30,4 +34,6 @@ public class UpdateCertificateDto {
     private LocalDateTime createDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
+    @Valid
+    private List<UpdateTagDto> updateTagDtoList;
 }

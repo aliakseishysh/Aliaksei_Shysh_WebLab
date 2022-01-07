@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @Profile("development")
 @Configuration
-@PropertySource("classpath:/properties/database.properties")
+@PropertySource("classpath:/application.properties")
 public class DevelopmentDataSourceConfiguration implements DataSourceConfiguration {
     private final Environment environment;
 

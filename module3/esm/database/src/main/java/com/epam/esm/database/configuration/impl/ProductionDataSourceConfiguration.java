@@ -7,6 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @Profile("production")
 @Configuration
-@PropertySource("classpath:/properties/database.properties")
+@PropertySource("classpath:/application.properties")
 public class ProductionDataSourceConfiguration implements DataSourceConfiguration {
 }

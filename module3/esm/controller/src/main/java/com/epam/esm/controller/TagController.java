@@ -5,6 +5,7 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.tag.*;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class TagController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> createTag(@RequestBody @Valid CreateTagDto createTagDto) throws EntityAlreadyExistsControllerException {
         try {
-            Long result = tagService.createTag(createTagDto);
+            Long result = tagService.save(createTagDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(result);
         } catch (EntityAlreadyExistsServiceException exception) {
             throw new EntityAlreadyExistsControllerException(exception);
@@ -55,7 +56,15 @@ public class TagController {
      */
     @GetMapping
     public ResponseEntity<List<TagDto>> findTags() {
-        List<TagDto> tags = tagService.read();
+        List<TagDto> tags = tagService.findAll();
+        return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
+    }
+
+    @Profile(value = "development")
+    // TODO delete, this is just test example
+    @GetMapping(path = "/name")
+    public ResponseEntity<List<TagDto>> findTagsByName(@RequestBody @Valid ReadTagByNameDto readTagByNameDto) {
+        List<TagDto> tags = tagService.findByName(readTagByNameDto);
         return !tags.isEmpty() ? ResponseEntity.ok(tags) : ResponseEntity.noContent().build();
     }
 
@@ -71,9 +80,11 @@ public class TagController {
      * @param deleteTagByIdDto dto object for tag id
      * @return
      */
+    //TODO return boolean value
     @DeleteMapping(path = "/delete/id")
     public ResponseEntity<Boolean> deleteTagById(@RequestBody @Valid DeleteTagByIdDto deleteTagByIdDto) {
-        return ResponseEntity.ok(tagService.deleteTag(deleteTagByIdDto));
+        tagService.deleteById(deleteTagByIdDto);
+        return ResponseEntity.ok(true);
     }
 
     /**
@@ -82,9 +93,11 @@ public class TagController {
      * @param deleteTagByNameDto dto object for tag id
      * @return
      */
+    //TODO return boolean value
     @DeleteMapping(path = "/delete/name")
     public ResponseEntity<Boolean> deleteTagByName(@RequestBody @Valid DeleteTagByNameDto deleteTagByNameDto) {
-        return ResponseEntity.ok(tagService.deleteTag(deleteTagByNameDto));
+        tagService.deleteByName(deleteTagByNameDto);
+        return ResponseEntity.ok(true);
     }
 
 }

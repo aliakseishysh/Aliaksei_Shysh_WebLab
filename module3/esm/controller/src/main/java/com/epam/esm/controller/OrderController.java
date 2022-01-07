@@ -7,6 +7,7 @@ import com.epam.esm.service.dto.order.OrderDto;
 import com.epam.esm.service.dto.order.SearchOrderByIdDto;
 import com.epam.esm.service.dto.order.SearchOrderByUsernameDto;
 import com.epam.esm.service.dto.order.SearchOrdersDto;
+import com.epam.esm.service.util.DtoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,22 +65,14 @@ public class OrderController {
     public ResponseEntity<Object> readOrders(@RequestBody @Valid SearchOrdersDto searchOrdersDto,
                                                      @RequestParam(name = "byOrderId", required = false, defaultValue = "false") Boolean byOrderId,
                                                      @RequestParam(name = "byUsername", required = false, defaultValue = "false") Boolean byUsername) throws WrongParametersControllerException {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
         if (byOrderId && !byUsername) {
             SearchOrderByIdDto searchOrderByIdDto = new SearchOrderByIdDto(searchOrdersDto.getOrderId());
-            Set<ConstraintViolation<SearchOrderByIdDto>> violations = validator.validate(searchOrderByIdDto);
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
+            DtoValidator.validate(searchOrderByIdDto);
             List<OrderDto> orders = orderService.readById(searchOrderByIdDto);
             return !orders.isEmpty() ? ResponseEntity.ok(orders.get(0)) : ResponseEntity.noContent().build();
         } else if (byUsername && !byOrderId) {
             SearchOrderByUsernameDto searchOrderByUsernameDto = new SearchOrderByUsernameDto(searchOrdersDto.getUsername());
-            Set<ConstraintViolation<SearchOrderByUsernameDto>> violations = validator.validate(searchOrderByUsernameDto);
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
+            DtoValidator.validate(searchOrderByUsernameDto);
             List<OrderDto> orders = orderService.readByName(searchOrderByUsernameDto);
             return !orders.isEmpty() ? ResponseEntity.ok(orders) : ResponseEntity.noContent().build();
         }

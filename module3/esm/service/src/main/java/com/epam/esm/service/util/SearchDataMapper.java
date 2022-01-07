@@ -30,7 +30,7 @@ public class SearchDataMapper {
 
     public static SearchData toObject(SearchDataDto searchDataDto) {
         return new SearchData(
-                searchDataDto.getTagName(),
+                searchDataDto.getTagNames(),
                 searchDataDto.getPartialCertificateName(),
                 searchDataDto.getPartialCertificateDescription(),
                 searchDataDto.getSortData() == null ? null : toObject(searchDataDto.getSortData())
@@ -39,7 +39,7 @@ public class SearchDataMapper {
 
     public static SearchDataDto toDto(SearchData searchData) {
         return new SearchDataDto(
-                searchData.getTagName(),
+                searchData.getTagNames(),
                 searchData.getPartialCertificateName(),
                 searchData.getPartialCertificateDescription(),
                 toDto(searchData.getSortData())

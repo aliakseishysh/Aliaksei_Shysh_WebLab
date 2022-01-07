@@ -17,30 +17,30 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TagCertificateDaoImplTest {
 
-    private static EmbeddedDatabase embeddedDatabase;
-    private static TagCertificateDao tagCertificateDao;
-
-    @BeforeAll
-    public static void init() {
-        embeddedDatabase = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .setName("testdb;DATABASE_TO_UPPER=false")
-                .addScript("database_test.sql")
-                .build();
-
-        tagCertificateDao = new TagCertificateDaoImpl(new JdbcTemplate(embeddedDatabase));
-    }
-
-    @Test
-    @Order(1)
-    public void createTest() {
-        boolean actual = tagCertificateDao.create(3L, 1L);
-        Assertions.assertTrue(actual);
-    }
-
-    @AfterAll
-    public static void shutdownDatabase() {
-        embeddedDatabase.shutdown();
-    }
+//    private static EmbeddedDatabase embeddedDatabase;
+//    private static TagCertificateDao tagCertificateDao;
+//
+//    @BeforeAll
+//    public static void init() {
+//        embeddedDatabase = new EmbeddedDatabaseBuilder()
+//                .setType(EmbeddedDatabaseType.H2)
+//                .setName("testdb;DATABASE_TO_UPPER=false")
+//                .addScript("database_test.sql")
+//                .build();
+//
+//        tagCertificateDao = new TagCertificateDaoImpl(new JdbcTemplate(embeddedDatabase));
+//    }
+//
+//    @Test
+//    @Order(1)
+//    public void createTest() {
+//        boolean actual = tagCertificateDao.create(3L, 1L);
+//        Assertions.assertTrue(actual);
+//    }
+//
+//    @AfterAll
+//    public static void shutdownDatabase() {
+//        embeddedDatabase.shutdown();
+//    }
 
 }

@@ -3,20 +3,12 @@ package com.epam.esm.database.dao;
 import com.epam.esm.database.entity.Tag;
 import com.epam.esm.database.entity.TagCost;
 import com.epam.esm.database.exception.EntityAlreadyExistsDaoException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TagDao {
+public interface TagDao extends JpaRepository<Tag, Long> {
+    List<Tag> findByName(String name);
 
-    long create(Tag tag) throws EntityAlreadyExistsDaoException;
-
-    List<Tag> read();
-
-    List<Tag> read(String name);
-
-    boolean delete(long id);
-
-    boolean delete(String name);
-
-    List<TagCost> readMostWidelyUsed(String username);
+    List<Tag> deleteByName(String name);
 }

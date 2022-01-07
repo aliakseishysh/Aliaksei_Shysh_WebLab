@@ -28,57 +28,57 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceImplTest {
-    @Mock
-    private TagDao tagDao;
-    @InjectMocks
-    private TagServiceImpl tagService;
-
-    @Test
-    public void readTest() {
-        List<Tag> daoReturnTags = new ArrayList<>();
-        daoReturnTags.add(new Tag(1L, "tag name 1"));
-        daoReturnTags.add(new Tag(2L, "tag name 2"));
-        List<TagDto> expected = new ArrayList<>();
-        expected.add(new TagDto(1L, "tag name 1"));
-        expected.add(new TagDto(2L, "tag name 2"));
-        doReturn(daoReturnTags).when(tagDao).read();
-        List<TagDto> actual = tagService.read();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void readByTagNameTest() {
-        Tag daoReturnTag = new Tag(1L, "tag name 1");
-        List<Tag> daoReturnTagList = new ArrayList<>();
-        daoReturnTagList.add(daoReturnTag);
-        List<TagDto> expected = new ArrayList<>();
-        expected.add(new TagDto(1L, "tag name 1"));
-        doReturn(daoReturnTagList).when(tagDao).read("tag name 1");
-        List<TagDto> actual = tagService.read(new ReadTagByNameDto("tag name 1"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createTagTest() throws EntityAlreadyExistsServiceException, EntityAlreadyExistsDaoException {
-        Long expected = 1L;
-        when(tagDao.create(any())).thenReturn(expected);
-        long actual = tagService.createTag(new CreateTagDto("tag name 1"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void deleteTagByIdTest() {
-        when(tagDao.delete(1L)).thenReturn(true);
-        boolean actual = tagService.deleteTag(new DeleteTagByIdDto(1L));
-        assertTrue(actual);
-    }
-
-    @Test
-    public void deleteTagByNameTest() {
-        when(tagDao.delete("tag name 1")).thenReturn(true);
-        boolean actual = tagService.deleteTag(new DeleteTagByNameDto("tag name 1"));
-        assertTrue(actual);
-    }
+//    @Mock
+//    private TagDao tagDao;
+//    @InjectMocks
+//    private TagServiceImpl tagService;
+//
+//    @Test
+//    public void readTest() {
+//        List<Tag> daoReturnTags = new ArrayList<>();
+//        daoReturnTags.add(new Tag(1L, "tag name 1"));
+//        daoReturnTags.add(new Tag(2L, "tag name 2"));
+//        List<TagDto> expected = new ArrayList<>();
+//        expected.add(new TagDto(1L, "tag name 1"));
+//        expected.add(new TagDto(2L, "tag name 2"));
+//        doReturn(daoReturnTags).when(tagDao).read();
+//        List<TagDto> actual = tagService.read();
+//        assertEquals(expected, actual);
+//    }
+//
+//    @Test
+//    public void readByTagNameTest() {
+//        Tag daoReturnTag = new Tag(1L, "tag name 1");
+//        List<Tag> daoReturnTagList = new ArrayList<>();
+//        daoReturnTagList.add(daoReturnTag);
+//        List<TagDto> expected = new ArrayList<>();
+//        expected.add(new TagDto(1L, "tag name 1"));
+//        doReturn(daoReturnTagList).when(tagDao).read("tag name 1");
+//        List<TagDto> actual = tagService.read(new ReadTagByNameDto("tag name 1"));
+//        assertEquals(expected, actual);
+//    }
+//
+//    @Test
+//    public void createTagTest() throws EntityAlreadyExistsServiceException, EntityAlreadyExistsDaoException {
+//        Long expected = 1L;
+//        when(tagDao.create(any())).thenReturn(expected);
+//        long actual = tagService.createTag(new CreateTagDto("tag name 1"));
+//        assertEquals(expected, actual);
+//    }
+//
+//    @Test
+//    public void deleteTagByIdTest() {
+//        when(tagDao.delete(1L)).thenReturn(true);
+//        boolean actual = tagService.deleteTag(new DeleteTagByIdDto(1L));
+//        assertTrue(actual);
+//    }
+//
+//    @Test
+//    public void deleteTagByNameTest() {
+//        when(tagDao.delete("tag name 1")).thenReturn(true);
+//        boolean actual = tagService.deleteTag(new DeleteTagByNameDto("tag name 1"));
+//        assertTrue(actual);
+//    }
 
 
 }

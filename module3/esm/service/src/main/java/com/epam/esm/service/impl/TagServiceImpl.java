@@ -6,9 +6,12 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.service.dto.tag.*;
 import com.epam.esm.service.exception.EntityAlreadyExistsServiceException;
 import com.epam.esm.service.util.TagMapper;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -22,35 +25,36 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDto> read() {
-        return TagMapper.toDto(tagDao.read());
+    public List<TagDto> findAll() {
+        return TagMapper.toDto(tagDao.findAll());
     }
 
     @Override
-    public List<TagDto> read(ReadTagByNameDto readTagByNameDto) {
-        return TagMapper.toDto(tagDao.read(readTagByNameDto.getName()));
+    public List<TagDto> findByName(ReadTagByNameDto readTagByNameDto) {
+        return TagMapper.toDto(tagDao.findByName(readTagByNameDto.getName()));
     }
 
+    // TODO rewrite with hibernate
     @Override
     public List<TagCostDto> read(ReadMostWidelyUsedTagDto readMostWidelyUsedTagDto) {
-        return TagMapper.toDtoTagCost(tagDao.readMostWidelyUsed(readMostWidelyUsedTagDto.getUsername()));
+        throw new UnsupportedOperationException("Not supported!!!");
+        //return TagMapper.toDtoTagCost(tagDao.readMostWidelyUsed(readMostWidelyUsedTagDto.getUsername()));
+    }
+
+
+    @Override
+    public long save(CreateTagDto tagDto) {
+        return tagDao.save(TagMapper.toObject(tagDto)).getId();
     }
 
     @Override
-    public long createTag(CreateTagDto tagDto) throws EntityAlreadyExistsServiceException {
-        try {
-            return tagDao.create(TagMapper.toObject(tagDto));
-        } catch (EntityAlreadyExistsDaoException e) {
-            throw new EntityAlreadyExistsServiceException(e);
-        }
+    public void deleteById(DeleteTagByIdDto deleteTagByIdDto) {
+       tagDao.deleteById(deleteTagByIdDto.getId());
     }
 
+    @Transactional
     @Override
-    public boolean deleteTag(DeleteTagByIdDto deleteTagByIdDto) {
-        return tagDao.delete(deleteTagByIdDto.getId());
-    }
-    @Override
-    public boolean deleteTag(DeleteTagByNameDto deleteTagByNameDto) {
-        return tagDao.delete(deleteTagByNameDto.getName());
+    public void deleteByName(DeleteTagByNameDto deleteTagByNameDto) {
+        tagDao.deleteByName(deleteTagByNameDto.getName());
     }
 }
